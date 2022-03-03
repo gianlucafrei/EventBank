@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/accounts/accounts.iml" filepath="$PROJECT_DIR$/accounts/accounts.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cards/cards-service.iml" filepath="$PROJECT_DIR$/cards/cards-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/notifications/notification-service.iml" filepath="$PROJECT_DIR$/notifications/notification-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/accounts/spring-cloud-stream-kafka.iml" filepath="$PROJECT_DIR$/accounts/spring-cloud-stream-kafka.iml" />
+    </modules>
+  </component>
+</project>

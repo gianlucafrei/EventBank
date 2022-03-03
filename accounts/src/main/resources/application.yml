@@ -1,0 +1,34 @@
+server:
+  port : 8081
+
+spring:
+  cloud:
+    function:
+      definition: producer;consumer;globalConsumer
+    stream:
+      kafka:
+        bindings:
+          global-out:
+            producer:
+              configuration:
+                value.serializer: com.example.eventbank.accounts.dto.converters.MessageSerializer
+          global-in:
+            consumer:
+              configuration:
+                value.deserializer: com.example.eventbank.accounts.dto.converters.MessageDeSerializer
+        binder:
+          brokers: localhost:29092
+
+      bindings:
+        global-out:
+          destination: global-events
+          producer:
+            useNativeEncoding: true # This enables using the custom serializer
+        global-in:
+          destination : global-events
+          globalConsumer:
+            use-native-decoding: true # This enables using the custom deserializer
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
