@@ -8,26 +8,21 @@ spring:
     stream:
       kafka:
         bindings:
-          global-out:
-            producer:
-              configuration:
-                value.serializer: com.example.eventbank.notifications.dto.converters.MessageSerializer
-          global-in:
+
+          consumer-in-0:
             consumer:
               configuration:
                 value.deserializer: com.example.eventbank.notifications.dto.converters.MessageDeSerializer
+
         binder:
           brokers: localhost:29092
 
       bindings:
-        global-out:
+
+        consumer-in-0:
           destination: global-events
-          producer:
-            useNativeEncoding: true # This enables using the custom serializer
-        global-in:
-          destination : global-events
-          globalConsumer:
-            use-native-decoding: true # This enables using the custom deserializer
+          consumer:
+            use-native-decoding: true
 
   jackson:
     serialization:

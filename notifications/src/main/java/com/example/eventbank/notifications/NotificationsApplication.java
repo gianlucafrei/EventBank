@@ -16,9 +16,8 @@ public class NotificationsApplication {
         SpringApplication.run(NotificationsApplication.class, args);
     }
 
-
     @Bean
-    public Consumer<Message<?>> globalConsumer() {
+    public Consumer<Message> global() {
         return message -> System.out.println("received " + message);
     }
 }
