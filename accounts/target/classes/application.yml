@@ -9,11 +9,7 @@ spring:
       kafka:
         bindings:
 
-          global-out-0:
-            producer:
-              configuration:
-                value.serializer: com.example.eventbank.accounts.dto.converters.MessageSerializer
-          global-in-0:
+          consumer-in-0:
             consumer:
               configuration:
                 value.deserializer: com.example.eventbank.accounts.dto.converters.MessageDeSerializer
@@ -22,13 +18,10 @@ spring:
           brokers: localhost:29092
 
       bindings:
-        global-out-0:
-          destination: global-events
-          producer:
-            useNativeEncoding: true
-        global-in-0:
-          destination : global-events
-          globalConsumer:
+
+        consumer-in-0:
+          destination: payment-events
+          consumer:
             use-native-decoding: true
 
   jackson:

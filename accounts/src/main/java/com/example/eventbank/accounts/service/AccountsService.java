@@ -84,7 +84,7 @@ public class AccountsService {
     private void reserveAmountProcessor(ReserveBalanceCommand reserveBalanceCommand, AccountServiceState state, String eventId){
 
         if(!state.accounts.containsKey(reserveBalanceCommand.getAccountId())){
-            throw new IllegalStateException("Account does not exist");
+            throw new AccountDoesNotExistException();
         }
 
         Account account = state.accounts.get(reserveBalanceCommand.getAccountId());

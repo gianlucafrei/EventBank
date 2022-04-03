@@ -9,11 +9,11 @@ spring:
       kafka:
         bindings:
 
-          global-out-0:
+          payment-out-0:
             producer:
               configuration:
                 value.serializer: com.example.eventbank.cards.dto.converters.MessageSerializer
-          global-in-0:
+          payment-in-0:
             consumer:
               configuration:
                 value.deserializer: com.example.eventbank.cards.dto.converters.MessageDeSerializer
@@ -22,12 +22,12 @@ spring:
           brokers: localhost:29092
 
       bindings:
-        global-out-0:
-          destination: global-events
+        payment-out-0:
+          destination: payment-events
           producer:
             useNativeEncoding: true
-        global-in-0:
-          destination : global-events
+        payment-in-0:
+          destination : payment-events
           globalConsumer:
             use-native-decoding: true
 
