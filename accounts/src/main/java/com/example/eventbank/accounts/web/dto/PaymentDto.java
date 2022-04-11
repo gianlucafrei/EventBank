@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class PaymentDto {
 
+    private String paymentId;
     private String creditorId;
     private String reservationId;
     private Integer amount;

@@ -1,6 +1,8 @@
-package com.example.eventbank.accounts.messaging;
+package com.example.eventbank.cards.messaging;
 
-import com.example.eventbank.accounts.dto.Message;
+import com.example.eventbank.cards.dto.Message;
+import com.example.eventbank.cards.dto.PaymentResultEvent;
+import com.example.eventbank.cards.service.CardPaymentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,8 @@ import java.util.function.Consumer;
 public class MessagingAdapter {
 
     @Autowired
-    private PaymentsAdapter paymentsAdapter;
+    private CardPaymentService cardPaymentService;
+
     private ObjectMapper om = new ObjectMapper();
 
     @Bean
@@ -29,11 +32,12 @@ public class MessagingAdapter {
 
         try{
 
-            if("paymentEvent".equals(message.getType())){
+            if("paymentResultEvent".equals(message.getType())){
 
                 String json = om.writeValueAsString(message.getData());
-                PaymentEvent event =  om.readValue(json, PaymentEvent.class);
-                paymentsAdapter.consumePaymentMessage(event);
+                PaymentResultEvent event =  om.readValue(json, PaymentResultEvent.class);
+                cardPaymentService.handlePaymentResultEvent(event);
+
             }
         }catch (Exception ex){
             log.error("Error while processing incoming message", ex);

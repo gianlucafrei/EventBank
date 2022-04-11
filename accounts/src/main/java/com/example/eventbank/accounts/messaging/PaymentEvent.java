@@ -10,14 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class PaymentEvent {
 
+    private String paymentId;
     private String sourceAccount;
     private String destinationAccount;
     private Integer amount;
-
-    public static PaymentEvent fromData(Object data) throws Exception {
-
-        ObjectMapper om = new ObjectMapper();
-        String json = om.writeValueAsString(data);
-        return om.readValue(json, PaymentEvent.class);
-    }
 }

@@ -23,7 +23,7 @@ class AccountsServiceTest {
         service.createNewAccount(new NewAccountCommand("account2", 0));
 
         // ACT
-        service.executePayment(new PaymentCommand("account1", "account2", 20, Optional.empty()));
+        service.executePayment(new PaymentCommand("somepaymentid","account1", "account2", 20, Optional.empty()));
 
         // Assert
         BalanceQueryResult account1 = service.queryBalance(new BalanceQuery("account1"));
@@ -45,11 +45,11 @@ class AccountsServiceTest {
         service.reserveAmount(new ReserveBalanceCommand("account1", 50));
 
         // This should work
-        service.executePayment(new PaymentCommand("account1", "account2", 40, Optional.empty()));
+        service.executePayment(new PaymentCommand("somepaymentid","account1", "account2", 40, Optional.empty()));
 
         // But not a second time
         assertThrows(InsufficientAccountLimitException.class, () -> {
-            service.executePayment(new PaymentCommand("account1", "account2", 40, Optional.empty()));
+            service.executePayment(new PaymentCommand("somepaymentid","account1", "account2", 40, Optional.empty()));
         });
     }
 }

@@ -1,11 +1,14 @@
 package com.example.eventbank.accounts.service;
 
+import com.example.eventbank.accounts.dto.Message;
 import com.example.eventbank.accounts.eventLog.EventLog;
+import com.example.eventbank.accounts.messaging.PaymentResultEvent;
 import com.example.eventbank.accounts.service.interf.*;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,6 +20,9 @@ import java.util.stream.Collectors;
 @Service
 @Log4j2
 public class AccountsService {
+
+    @Autowired
+    private StreamBridge streamBridge;
 
     private EventLog eventLog;
     private AccountServiceState state = new AccountServiceState();
@@ -45,8 +51,25 @@ public class AccountsService {
     public void executePayment(PaymentCommand command){
 
         TriConsumer<PaymentCommand, AccountServiceState, String> processor = this::paymentProcessor;
-        eventLog.createEvent(command, state).withProcessor(processor).processAndPersist();
 
+        PaymentResultEvent resultEvent;
+        try{
+            eventLog.createEvent(command, state)
+                    .withIdempotence(command.getPaymentId())
+                    .withProcessor(processor)
+                    .processAndPersist();
+
+            resultEvent = new PaymentResultEvent(command.getPaymentId(), true, "Payment stored");
+        }
+        catch (Exception ex){
+            log.warn("Exception during payment processing {}", ex);
+            resultEvent = new PaymentResultEvent(command.getPaymentId(), false, "Payment Failed: " + ex.getMessage());
+        }
+
+
+        Message message = new Message<>("paymentResultEvent", resultEvent);
+        streamBridge.send("payment-out-0", message);
+        log.info("Sent paymentResultEvent to payment-out-0 via StreamBridge");
     }
 
     private void paymentProcessor(PaymentCommand paymentCommand, AccountServiceState state, String eventId){
