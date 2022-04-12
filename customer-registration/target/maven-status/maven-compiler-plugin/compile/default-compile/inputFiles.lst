@@ -1,0 +1,6 @@
+/Users/gifr/Documents/git/EventBank/accounts/src/main/java/com/example/eventbank/accounts/dto/converters/MessageSerializer.java
+/Users/gifr/Documents/git/EventBank/accounts/src/main/java/com/example/eventbank/accounts/dto/converters/MessageDeSerializer.java
+/Users/gifr/Documents/git/EventBank/accounts/src/main/java/com/example/eventbank/accounts/SpringCloudStreamKafkaApplication.java
+/Users/gifr/Documents/git/EventBank/accounts/src/main/java/com/example/eventbank/accounts/KafkaRestController.java
+/Users/gifr/Documents/git/EventBank/accounts/src/main/java/com/example/eventbank/accounts/dto/Message.java
+/Users/gifr/Documents/git/EventBank/accounts/src/main/java/com/example/eventbank/accounts/KafkaProducer.java
