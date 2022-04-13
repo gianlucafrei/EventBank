@@ -12,8 +12,6 @@ import org.camunda.bpm.engine.runtime.MessageCorrelationBuilder;
 import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -28,7 +26,6 @@ public class MessageService {
             MessageCorrelationBuilder messageCorrelationBuilder = runtimeService.createMessageCorrelation(messageName);
 
             if (camundaMessageDto.getDto() != null) {
-                Map<String, Object> variables = VariablesUtil.toVariableMap(camundaMessageDto.getDto());
                 messageCorrelationBuilder.setVariables(VariablesUtil.toVariableMap(camundaMessageDto.getDto()));
             }
 

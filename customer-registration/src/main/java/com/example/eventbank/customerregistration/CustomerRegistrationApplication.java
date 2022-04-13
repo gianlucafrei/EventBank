@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableProcessApplication("customer-registration")
+@EnableProcessApplication("application")
 public class CustomerRegistrationApplication {
 
     public static void main(String[] args) {

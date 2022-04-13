@@ -1,6 +1,5 @@
 server:
-  port : 8081
-
+  port: 8084
 
 spring.datasource.url: jdbc:h2:file:./camunda-h2-database
 
@@ -10,29 +9,8 @@ camunda.bpm:
     password: demo
   filter.create: All Tasks
 
-spring:
-  cloud:
-    function:
-      definition: producer;consumer;globalConsumer
-    stream:
-      kafka:
-        bindings:
+kafka:
+  bootstrap-address: localhost:9092
+  group-id: someGroupId
+  trusted-packages: com.example.eventbank.customerregistration.web.dto
 
-          consumer-in-0:
-            consumer:
-              configuration:
-                value.deserializer: com.example.eventbank.customerregistration.dto.converters.MessageDeSerializer
-
-        binder:
-          brokers: localhost:29092
-
-      bindings:
-
-        consumer-in-0:
-          destination: payment-events
-          consumer:
-            use-native-decoding: true
-
-  jackson:
-    serialization:
-      write-dates-as-timestamps: false
