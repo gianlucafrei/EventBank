@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 2,
+  "components": [
+    {
+      "label": "Text Field",
+      "type": "textfield",
+      "id": "Field_1rip2qs",
+      "key": "field_142wuh3"
+    },
+    {
+      "label": "Passport valid",
+      "type": "checkbox",
+      "id": "Field_1rmpm79",
+      "key": "passport_valid"
+    }
+  ],
+  "type": "default",
+  "id": "passport_id"
+}

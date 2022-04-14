@@ -1,6 +1,6 @@
 package com.example.eventbank.customerregistration.config;
 
-import com.example.eventbank.customerregistration.web.dto.CamundaMessageDto;
+import com.example.eventbank.customerregistration.dto.CamundaMessageDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,6 +1,6 @@
 package com.example.eventbank.customerregistration.web;
 
-import com.example.eventbank.customerregistration.web.dto.CamundaMessageDto;
+import com.example.eventbank.customerregistration.dto.CamundaMessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;

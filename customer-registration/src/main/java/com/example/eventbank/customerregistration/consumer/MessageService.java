@@ -1,7 +1,7 @@
 package com.example.eventbank.customerregistration.consumer;
 
+import com.example.eventbank.customerregistration.dto.CamundaMessageDto;
 import com.example.eventbank.customerregistration.util.VariablesUtil;
-import com.example.eventbank.customerregistration.web.dto.CamundaMessageDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

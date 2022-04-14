@@ -1,7 +1,7 @@
 package com.example.eventbank.customerregistration.util;
 
-import com.example.eventbank.customerregistration.web.dto.CamundaMessageDto;
-import com.example.eventbank.customerregistration.web.dto.MessageProcessDto;
+import com.example.eventbank.customerregistration.dto.CamundaMessageDto;
+import com.example.eventbank.customerregistration.dto.MessageProcessDto;
 import lombok.experimental.UtilityClass;
 
 import java.beans.BeanInfo;
@@ -23,15 +23,15 @@ public class VariablesUtil {
             Method reader = pd.getReadMethod();
             if (reader != null && !pd.getName().equals("class")) {
                 Object value = reader.invoke(object);
-                if(value != null) {
+                if (value != null) {
                     variables.put(pd.getName(), reader.invoke(object));
                 }
             }
         }
-        return  variables;
+        return variables;
     }
 
-    public <T> CamundaMessageDto buildCamundaMessageDto(String businessKey, Map<String, Object> variablesMap){
+    public <T> CamundaMessageDto buildCamundaMessageDto(String businessKey, Map<String, Object> variablesMap) {
         return CamundaMessageDto.builder().correlationId(businessKey)
                 .dto(MessageProcessDto.builder().requester((String) variablesMap.get("requester"))
                         .amount((Double) variablesMap.get("amount"))

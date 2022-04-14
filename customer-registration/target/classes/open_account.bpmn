@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0ie2rql" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="Process_184i1my" isExecutable="true">
+    <bpmn:sequenceFlow id="Flow_1ja73wh" sourceRef="StartEvent_1" targetRef="upload_id" />
+    <bpmn:userTask id="upload_id" name="Upload ID" camunda:formRef="" camunda:formRefBinding="latest" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="passport_valid" label="Passport Valid" type="boolean" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ja73wh</bpmn:incoming>
+      <bpmn:outgoing>Flow_18x6co6</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_18x6co6" sourceRef="upload_id" targetRef="passport_valid_gate" />
+    <bpmn:exclusiveGateway id="passport_valid_gate" name="Passport valid?">
+      <bpmn:incoming>Flow_18x6co6</bpmn:incoming>
+      <bpmn:outgoing>Flow_0fylkjv</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1j924x8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0fylkjv" name="invalid" sourceRef="passport_valid_gate" targetRef="Event_0l8jofk">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!passport_valid}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_0bemtns">
+      <bpmn:incoming>Flow_1j924x8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1j924x8" name="valid" sourceRef="passport_valid_gate" targetRef="Event_0bemtns">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${passport_valid}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_0l8jofk">
+      <bpmn:incoming>Flow_0fylkjv</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1ja73wh</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_11lb2th" messageRef="Message_0hurp6c" />
+    </bpmn:startEvent>
+  </bpmn:process>
+  <bpmn:message id="Message_0hurp6c" name="MessageApply" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_184i1my">
+      <bpmndi:BPMNEdge id="Flow_1ja73wh_di" bpmnElement="Flow_1ja73wh">
+        <di:waypoint x="188" y="140" />
+        <di:waypoint x="290" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18x6co6_di" bpmnElement="Flow_18x6co6">
+        <di:waypoint x="390" y="140" />
+        <di:waypoint x="475" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fylkjv_di" bpmnElement="Flow_0fylkjv">
+        <di:waypoint x="500" y="165" />
+        <di:waypoint x="500" y="250" />
+        <di:waypoint x="612" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="534" y="233" width="32" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1j924x8_di" bpmnElement="Flow_1j924x8">
+        <di:waypoint x="525" y="140" />
+        <di:waypoint x="612" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="558" y="122" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_13mcipi_di" bpmnElement="upload_id">
+        <dc:Bounds x="290" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0jetslj_di" bpmnElement="passport_valid_gate" isMarkerVisible="true">
+        <dc:Bounds x="475" y="115" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="466" y="85" width="76" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0bemtns_di" bpmnElement="Event_0bemtns">
+        <dc:Bounds x="612" y="122" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0l8jofk_di" bpmnElement="Event_0l8jofk">
+        <dc:Bounds x="612" y="232" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1nsuaxw_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="122" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

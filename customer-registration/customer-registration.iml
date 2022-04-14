@@ -15,9 +15,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping>
-          <factory-entry name="customer-registration" />
-        </datasource-mapping>
+        <datasource-mapping />
         <naming-strategy-map />
       </configuration>
     </facet>
@@ -37,45 +35,43 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-rest:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm:camunda-engine-spring:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm:camunda-engine:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.model:camunda-bpmn-model:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.model:camunda-xml-model:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.model:camunda-cmmn-model:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.dmn:camunda-engine-dmn:7.15.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-rest:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm:camunda-engine-spring:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm:camunda-engine:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.model:camunda-bpmn-model:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.model:camunda-xml-model:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.model:camunda-cmmn-model:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.dmn:camunda-engine-dmn:7.17.0" level="project" />
     <orderEntry type="library" name="Maven: org.camunda.commons:camunda-commons-utils:1.10.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.model:camunda-dmn-model:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.dmn:camunda-engine-feel-api:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.dmn:camunda-engine-feel-juel:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.dmn:camunda-engine-feel-scala:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.feel:feel-engine:scala-shaded:1.13.1" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.model:camunda-dmn-model:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.dmn:camunda-engine-feel-api:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.dmn:camunda-engine-feel-juel:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.dmn:camunda-engine-feel-scala:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.feel:feel-engine:scala-shaded:1.13.3" level="project" />
     <orderEntry type="library" name="Maven: org.camunda.commons:camunda-commons-logging:1.10.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.commons:camunda-commons-typed-values:7.15.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.commons:camunda-commons-typed-values:7.17.0" level="project" />
     <orderEntry type="library" name="Maven: org.mybatis:mybatis:3.5.6" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.1" level="project" />
     <orderEntry type="library" name="Maven: org.camunda.connect:camunda-connect-core:1.5.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.camunda.connect:camunda-connect-connectors-all:1.5.2" level="project" />
-    <orderEntry type="library" name="Maven: commons-dbcp:commons-dbcp:1.4" level="project" />
-    <orderEntry type="library" name="Maven: commons-pool:commons-pool:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:5.3.13" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-orm:5.3.13" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-loader-tools:2.6.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.21" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.12.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.uuid:java-uuid-generator:3.2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm:camunda-engine-rest-jaxrs2:7.15.0" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.xml.bind:jaxb-impl:2.3.6" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: com.sun.activation:jakarta.activation:1.2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm:camunda-engine-rest-jaxrs2:7.17.0" level="project" />
     <orderEntry type="library" name="Maven: commons-fileupload:commons-fileupload:1.4" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.8.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.13.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.13.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.13.0" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-jersey:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-json:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.0" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-tomcat:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.55" level="project" />
@@ -112,11 +108,11 @@
     <orderEntry type="library" name="Maven: org.glassfish.hk2:spring-bridge:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.media:jersey-media-json-jackson:2.35" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.ext:jersey-entity-filtering:2.35" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-webapp:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-webapp-core:7.15.0" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.webapp:camunda-webapp:classes:7.15.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-webapp:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-webapp-core:7.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.webapp:camunda-webapp:classes:7.17.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.6.1" level="project" />
-    <orderEntry type="library" name="Maven: org.camunda.bpm.webapp:camunda-webapp-webjar:7.15.0" level="project" />
+    <orderEntry type="library" name="Maven: org.camunda.bpm.webapp:camunda-webapp-webjar:7.17.0" level="project" />
     <orderEntry type="library" name="Maven: com.h2database:h2:1.4.200" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-data-jpa:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-aop:2.6.1" level="project" />
@@ -136,7 +132,6 @@
     <orderEntry type="library" name="Maven: org.glassfish.jaxb:jaxb-runtime:2.3.5" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jaxb:txw2:2.3.5" level="project" />
     <orderEntry type="library" name="Maven: com.sun.istack:istack-commons-runtime:3.0.12" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: com.sun.activation:jakarta.activation:1.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-jpa:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.13" level="project" />

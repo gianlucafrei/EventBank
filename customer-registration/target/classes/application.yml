@@ -12,8 +12,5 @@ camunda.bpm:
 kafka:
   bootstrap-address: localhost:9092
   group-id: someGroupId
-  trusted-packages: com.example.eventbank.customerregistration.web.dto
+  trusted-packages: com.example.eventbank.customerregistration.dto
 
-jackson:
-  serialization:
-    write-dates-as-timestamps: false

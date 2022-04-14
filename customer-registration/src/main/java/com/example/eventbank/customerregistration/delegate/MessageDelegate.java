@@ -1,7 +1,7 @@
 package com.example.eventbank.customerregistration.delegate;
 
+import com.example.eventbank.customerregistration.dto.CamundaMessageDto;
 import com.example.eventbank.customerregistration.util.VariablesUtil;
-import com.example.eventbank.customerregistration.web.dto.CamundaMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -20,7 +20,10 @@ public class MessageDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         log.info("Executing task {}", delegateExecution.getCurrentActivityId());
-        CamundaMessageDto camundaMessageDto = VariablesUtil.buildCamundaMessageDto(delegateExecution.getProcessBusinessKey(), delegateExecution.getVariables());
+        CamundaMessageDto camundaMessageDto = VariablesUtil.buildCamundaMessageDto(
+                delegateExecution.getProcessBusinessKey(),
+                delegateExecution.getVariables());
+        
         kafkaTemplate.send("service-task-message-topic", camundaMessageDto);
     }
 }

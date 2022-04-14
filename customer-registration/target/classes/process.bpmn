@@ -23,7 +23,7 @@
         </bpmn:intermediateCatchEvent>
         <bpmn:sequenceFlow id="Flow_0ehw2mw" sourceRef="Activity_0tcd2jw" targetRef="Event_1utedw3"/>
         <bpmn:serviceTask id="Activity_0tcd2jw" name="Publish Result Message"
-                          camunda:class="org.camunda.bpm.demo.delegate.MessageDelegate">
+                          camunda:class="com.example.eventbank.customerregistration.delegate.MessageDelegate">
             <bpmn:incoming>Flow_0r4rs2a</bpmn:incoming>
             <bpmn:outgoing>Flow_0ehw2mw</bpmn:outgoing>
         </bpmn:serviceTask>
@@ -54,7 +54,7 @@
             </bpmn:endEvent>
             <bpmn:sequenceFlow id="Flow_08sj9w7" sourceRef="Activity_0auuzip" targetRef="Event_0w2clca"/>
             <bpmn:serviceTask id="Activity_0auuzip" name="Some Task"
-                              camunda:class="org.camunda.bpm.demo.delegate.MessageDelegate">
+                              camunda:class="com.example.eventbank.customerregistration.delegate.MessageDelegate">
                 <bpmn:incoming>Flow_13kojmo</bpmn:incoming>
                 <bpmn:outgoing>Flow_08sj9w7</bpmn:outgoing>
             </bpmn:serviceTask>

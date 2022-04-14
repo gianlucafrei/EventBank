@@ -1,6 +1,9 @@
-package com.example.eventbank.customerregistration.web.dto;
+package com.example.eventbank.customerregistration.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
