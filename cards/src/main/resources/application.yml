@@ -13,7 +13,7 @@ spring:
             producer:
               configuration:
                 value.serializer: com.example.eventbank.cards.dto.converters.MessageSerializer
-          payment-in-0:
+          consumer-in-0:
             consumer:
               configuration:
                 value.deserializer: com.example.eventbank.cards.dto.converters.MessageDeSerializer
@@ -26,9 +26,9 @@ spring:
           destination: payment-events
           producer:
             useNativeEncoding: true
-        payment-in-0:
-          destination : payment-events
-          globalConsumer:
+        consumer-in-0:
+          destination: payment-events
+          consumer:
             use-native-decoding: true
 
   jackson:

@@ -20,7 +20,7 @@ spring:
       bindings:
 
         consumer-in-0:
-          destination: global-events
+          destination: payment-events
           consumer:
             use-native-decoding: true
 

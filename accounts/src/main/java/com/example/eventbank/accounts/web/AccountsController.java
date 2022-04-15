@@ -46,6 +46,7 @@ public class AccountsController {
     public void createPayment(@PathVariable String id, @RequestBody PaymentDto paymentDto){
 
         PaymentCommand command = new PaymentCommand(
+                paymentDto.getPaymentId(),
                 id,
                 paymentDto.getCreditorId(),
                 paymentDto.getAmount(),

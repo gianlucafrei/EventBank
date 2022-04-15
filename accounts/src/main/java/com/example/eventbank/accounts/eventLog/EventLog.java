@@ -5,6 +5,7 @@ import org.apache.logging.log4j.util.TriConsumer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
@@ -36,6 +37,7 @@ public class EventLog {
         private STATE state;
         private CMD command;
         private TriConsumer<CMD, STATE, String> processor;
+        private String idempotenceId = null;
 
         private EventLogEntryBuilder(EventLog eventLog, CMD command, STATE state){
             this.eventLog = eventLog;
@@ -48,9 +50,31 @@ public class EventLog {
             return this;
         }
 
+        public EventLogEntryBuilder<CMD, STATE> withIdempotence(String idempotenceId){
+            this.idempotenceId = idempotenceId;
+            return this;
+        }
+
         public String processAndPersist(){
 
-            EventLogEntry entry = new EventLogEntry(command);
+            EventLogEntry entry = new EventLogEntry(command, idempotenceId);
+
+            // If we already have an event with the same idempotenceId we directly return the result and do nothing else
+            if(idempotenceId != null){
+                Optional<EventLogEntry> entryAlreadyProcessed =
+                        eventLog.getEvents()
+                                .stream()
+                                .filter(e -> entry.type.equals(e.type))
+                                .filter(e -> idempotenceId.equals(e.idempotenceId))
+                                .findFirst();
+
+                if(entryAlreadyProcessed.isPresent()){
+                    log.info("Did not process event because it was already processed with idempotenceId={} id={}", idempotenceId, entryAlreadyProcessed.get().eventId);
+                    return entryAlreadyProcessed.get().eventId;
+                }
+            }
+
+            // Otherwise we process and store new entry
 
             try{
 
@@ -73,11 +97,14 @@ public class EventLog {
         private Event event;
         private String eventId;
         private String type;
+        private String idempotenceId;
 
-        private EventLogEntry(Event event){
+
+        private EventLogEntry(Event event, String idempotenceId){
             this.event = event;
             this.eventId = UUID.randomUUID().toString();
             this.type = event.getClass().getCanonicalName();
+            this.idempotenceId = idempotenceId;
         }
     }
 }

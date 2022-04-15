@@ -2,13 +2,14 @@ package com.example.eventbank.cards.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class PaymentEvent {
+@NoArgsConstructor
+public class PaymentResultEvent {
 
     private String paymentId;
-    private String sourceAccount;
-    private String destinationAccount;
-    private Integer amount;
+    private boolean success;
+    private String message;
 }

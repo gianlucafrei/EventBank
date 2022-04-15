@@ -4,7 +4,6 @@ import com.example.eventbank.cards.dto.Message;
 import com.example.eventbank.cards.dto.PaymentEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
@@ -28,11 +27,13 @@ public class AccountsServiceAdapater {
 
     private String accountServiceUri = "http://localhost:8081";
 
-    public void reserveAmount(String account, Integer amount) throws Exception{
+    public void reserveAmount(String account, Integer amount, String paymentId) throws Exception{
 
         // Make a json object with the account and amount
         HashMap<String, Object> body = new HashMap<>();
         body.put("amount", amount);
+        body.put("paymentId", paymentId);
+
         String bodyStr = objectMapper.writeValueAsString(body);
         URI uri = URI.create(
                 accountServiceUri + "/accounts/" + UriUtils.encodePath(account, "UTF-8") +"/reservations");
@@ -58,6 +59,6 @@ public class AccountsServiceAdapater {
 
         Message message = new Message<>("paymentEvent", paymentEvent);
         streamBridge.send("payment-out-0", message);
-        log.info("Sent paymentEvent to payment-out-0 via StreamBridge");
+        log.info("Sent paymentEvent to payment-out-0: {}", paymentEvent);
     }
 }
