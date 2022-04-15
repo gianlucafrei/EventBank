@@ -1,7 +1,7 @@
 package com.example.eventbank.customerregistration.util;
 
 import com.example.eventbank.customerregistration.dto.CamundaMessageDto;
-import com.example.eventbank.customerregistration.dto.MessageProcessDto;
+import com.example.eventbank.customerregistration.dto.RegistrationProcessDto;
 import lombok.experimental.UtilityClass;
 
 import java.beans.BeanInfo;
@@ -33,10 +33,9 @@ public class VariablesUtil {
 
     public <T> CamundaMessageDto buildCamundaMessageDto(String businessKey, Map<String, Object> variablesMap) {
         return CamundaMessageDto.builder().correlationId(businessKey)
-                .dto(MessageProcessDto.builder().requester((String) variablesMap.get("requester"))
-                        .amount((Double) variablesMap.get("amount"))
-                        .preApproved((Boolean) variablesMap.get("preApproved"))
-                        .processed((Boolean) variablesMap.get("processed"))
+                .dto(RegistrationProcessDto.builder().firstName((String) variablesMap.get("firstName"))
+                        .lastName((String) variablesMap.get("lastName"))
+                        .emailAddress((String) variablesMap.get("emailAddress"))
                         .build()).build();
     }
 }

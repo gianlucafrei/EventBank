@@ -14,6 +14,6 @@ import java.io.Serializable;
 public class CamundaMessageDto implements Serializable {
 
     private String correlationId;
-    private MessageProcessDto dto;
+    private RegistrationProcessDto dto;
 
 }

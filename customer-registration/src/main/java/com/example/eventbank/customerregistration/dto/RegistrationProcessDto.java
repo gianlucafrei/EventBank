@@ -11,10 +11,9 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageProcessDto implements Serializable {
+public class RegistrationProcessDto implements Serializable {
 
-    private String requester;
-    private Double amount;
-    private Boolean preApproved;
-    private Boolean processed;
+    private String firstName;
+    private String lastName;
+    private String emailAddress;
 }
