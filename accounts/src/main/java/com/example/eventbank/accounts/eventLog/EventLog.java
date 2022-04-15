@@ -57,12 +57,15 @@ public class EventLog {
 
         public String processAndPersist(){
 
+            EventLogEntry entry = new EventLogEntry(command, idempotenceId);
+
             // If we already have an event with the same idempotenceId we directly return the result and do nothing else
             if(idempotenceId != null){
                 Optional<EventLogEntry> entryAlreadyProcessed =
                         eventLog.getEvents()
                                 .stream()
-                                .filter(l -> idempotenceId.equals(idempotenceId))
+                                .filter(e -> entry.type.equals(e.type))
+                                .filter(e -> idempotenceId.equals(e.idempotenceId))
                                 .findFirst();
 
                 if(entryAlreadyProcessed.isPresent()){
@@ -71,8 +74,7 @@ public class EventLog {
                 }
             }
 
-            // Otherwise we create a new entry
-            EventLogEntry entry = new EventLogEntry(command, idempotenceId);
+            // Otherwise we process and store new entry
 
             try{
 

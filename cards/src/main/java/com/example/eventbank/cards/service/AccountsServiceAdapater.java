@@ -59,6 +59,6 @@ public class AccountsServiceAdapater {
 
         Message message = new Message<>("paymentEvent", paymentEvent);
         streamBridge.send("payment-out-0", message);
-        log.info("Sent paymentEvent to payment-out-0 via StreamBridge");
+        log.info("Sent paymentEvent to payment-out-0: {}", paymentEvent);
     }
 }

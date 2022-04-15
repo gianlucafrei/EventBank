@@ -6,6 +6,8 @@ import com.example.eventbank.cards.dto.PaymentResultEvent;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -14,15 +16,17 @@ public class CardPaymentSaga {
 
     private static final int MAX_RETRIES = 5;
 
+
     public enum CardPaymentSagaStatus {
         OPEN, RESERVING_AMOUNT, AWAITING_PAYMENT, SUCCESS, ERROR
     }
 
+    private final String paymentId;
     private CardPaymentSagaStatus status;
     private PaymentRequest paymentRequest;
     private AccountsServiceAdapater accountsServiceAdapater;
     private PaymentEvent paymentEvent;
-    private final String paymentId;
+    private Instant start, end;
 
     private int numberOfRetries = 0;
 
@@ -39,12 +43,18 @@ public class CardPaymentSaga {
 
     public void retry() throws Exception {
 
+
         if(numberOfRetries >= MAX_RETRIES){
             this.status = CardPaymentSagaStatus.ERROR;
+            finish();
+            log.warn("Saga maxed out in retries, paymentId={} This must be investigated manually", this.numberOfRetries, this.paymentId);
             return;
         }
 
         this.numberOfRetries += 1;
+
+
+        log.info("Saga Retry No. {}, PaymentId={}", this.numberOfRetries, this.paymentId);
 
         // We retry only the payment execution step
         if(this.status == CardPaymentSagaStatus.AWAITING_PAYMENT){
@@ -55,6 +65,8 @@ public class CardPaymentSaga {
 
 
     public PaymentEvent startExecution(){
+
+        this.start = Instant.now();
 
         // Create payment event
         this.paymentEvent = new PaymentEvent(
@@ -90,10 +102,13 @@ public class CardPaymentSaga {
         // Otherwise we would here need to undo saga steps that already have been done
 
         if(paymentResultEvent.isSuccess()){
+            log.info("Payment succeeded after {} retries. PaymentId={}", this.numberOfRetries, this.paymentId);
+            finish();
             this.status = CardPaymentSagaStatus.SUCCESS;
         }
         else{
             this.status = CardPaymentSagaStatus.ERROR;
+            finish();
             log.warn("Received payment result with negative status for payment id={}: {}", paymentId, paymentResultEvent.getMessage());
         }
     }
@@ -111,5 +126,13 @@ public class CardPaymentSaga {
     private void executePayment(PaymentEvent paymentEvent) throws Exception{
 
         accountsServiceAdapater.sendPaymentEvent(paymentEvent);
+    }
+
+    private void finish(){
+
+        this.end = Instant.now();
+        Duration duration = Duration.between(this.start, this.end);
+
+        log.info("Saga ended after {}ms, status={}, paymentid={}", duration.toMillis(), this.status, this.paymentId);
     }
 }

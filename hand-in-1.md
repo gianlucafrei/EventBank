@@ -15,6 +15,8 @@ EventBank is a overly simplified banking system to study event driven architectu
 
 The messaging parts were mainly implemented by Gian-Luca. The orchistration parts (process engine) were implemented by Jonathan. However, we did the concept of the processes together and also reviewed each others code.
 
+The following description give a general overview of the implementation. More details can be found in the documented ADRs which can be found at `/adrs/`.
+
 ## Implementation of the Card Payments
 
 The card payments have some important requirements that we need to meet.

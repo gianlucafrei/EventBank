@@ -37,9 +37,8 @@ public class AccountsApplication {
     public void runAfterStartup() {
 
         // Create some default accounts
-        accountsService.createNewAccount(new NewAccountCommand("account1", -2000));
-        accountsService.createNewAccount(new NewAccountCommand("account2", -3000));
-        accountsService.createNewAccount(new NewAccountCommand("string", -10));
-
+        accountsService.createNewAccount(new NewAccountCommand("account1", -10_000_000));
+        accountsService.createNewAccount(new NewAccountCommand("account2", -10_000_000));
+        accountsService.createNewAccount(new NewAccountCommand("string", -10_000_000));
     }
 }
