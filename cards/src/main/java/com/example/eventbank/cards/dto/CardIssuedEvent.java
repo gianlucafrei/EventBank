@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class CardIssuedEvent {
 
+    private String accountId;
     private String cardId;
 
 }

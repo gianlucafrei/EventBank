@@ -21,15 +21,13 @@ public class MessageService {
 
     public MessageCorrelationResult correlateMessage(Message<?> message, String messageName) {
         try {
-            log.info("Consuming message {}", messageName);
+            log.info("Consuming message {} : {}", messageName, message.getData());
 
             MessageCorrelationBuilder messageCorrelationBuilder = runtimeService.createMessageCorrelation(messageName);
 
             if (message.getData() != null) {
                 messageCorrelationBuilder.setVariables(VariablesUtil.toVariableMap(message.getData()));
             }
-
-            log.info("Using correlation key: {}", message.getCorrelationId());
 
             MessageCorrelationResult messageResult = messageCorrelationBuilder
                     .processInstanceBusinessKey(message.getCorrelationId())

@@ -20,18 +20,10 @@ spring:
       bindings:
 
         consumer-in-0:
-          destination: notification
+          destination: notification-events
           consumer:
             use-native-decoding: true
 
   jackson:
     serialization:
       write-dates-as-timestamps: false
-
-
-  spring.mail.host: smtp.gmail.com
-  spring.mail.port: 587
-  spring.mail.username: <login user to smtp server>
-  spring.mail.password: wxncehuqnezuwaoi
-  spring.mail.properties.mail.smtp.auth: true
-  spring.mail.properties.mail.smtp.starttls.enable: true

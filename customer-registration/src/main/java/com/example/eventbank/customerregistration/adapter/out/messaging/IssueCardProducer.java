@@ -4,7 +4,7 @@ import com.example.eventbank.customerregistration.dto.Message;
 import com.example.eventbank.customerregistration.service.interf.IssueCardEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,10 +12,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class IssueCardProducer {
 
-    private final KafkaTemplate<String, Message<?>> kafkaTemplate;
+    private final StreamBridge streamBridge;
 
-    public void issueCard(Message<IssueCardEvent> message) {
-        log.info("Send issue card event: {}", message.getData().toString());
-        kafkaTemplate.send("issue-card-message-topic", message);
+
+    public void issueCard(IssueCardEvent issueCardEvent, String correlationId) {
+        Message<IssueCardEvent> message = new Message<>("issueCardEvent", issueCardEvent)
+                .setCorrelationId(correlationId);
+
+        streamBridge.send("issueCard-out-0", message);
+        log.info("Sent issue card event to issueCard-out-0: {}", issueCardEvent);
     }
 }

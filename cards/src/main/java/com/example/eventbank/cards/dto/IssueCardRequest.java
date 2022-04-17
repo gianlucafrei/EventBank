@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CardIssueRequest {
+public class IssueCardRequest {
 
-    private String accountId;
     private String firstName;
     private String lastName;
+    private String accountId;
 
 }

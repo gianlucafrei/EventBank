@@ -13,4 +13,5 @@ public class IssueCardEvent {
 
     private String firstName;
     private String lastName;
+    private String accountId;
 }

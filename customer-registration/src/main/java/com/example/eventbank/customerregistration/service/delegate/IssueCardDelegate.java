@@ -1,7 +1,6 @@
 package com.example.eventbank.customerregistration.service.delegate;
 
 import com.example.eventbank.customerregistration.adapter.out.messaging.IssueCardProducer;
-import com.example.eventbank.customerregistration.dto.Message;
 import com.example.eventbank.customerregistration.service.interf.IssueCardEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +19,12 @@ public class IssueCardDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
 
-        Message<IssueCardEvent> message = new Message<>("IssueCardEvent", new IssueCardEvent(
+        IssueCardEvent issueCardEvent = new IssueCardEvent(
                 delegateExecution.getVariable("firstName").toString(),
-                delegateExecution.getVariable("lastName").toString()
-        ));
-        message.setCorrelationId(delegateExecution.getProcessBusinessKey());
-        issueCardProducer.issueCard(message);
+                delegateExecution.getVariable("lastName").toString(),
+                delegateExecution.getVariable("accountId").toString()
+        );
+
+        issueCardProducer.issueCard(issueCardEvent, delegateExecution.getProcessBusinessKey());
     }
 }
