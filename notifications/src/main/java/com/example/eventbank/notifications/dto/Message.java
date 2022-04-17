@@ -7,15 +7,16 @@ import java.util.UUID;
 
 public class Message<T> {
 
+    private final String source = "eventbank-accounts";
+    private final String datacontenttype = "application/json";
+    private final String specversion = "1.0";
     // Cloud Events attributes (https://github.com/cloudevents/spec/blob/v1.0/spec.md)
     private String type;
     private String id = UUID.randomUUID().toString(); // unique id of this message
-    private String source = "eventbank-accounts";
     @JsonFormat(shape = JsonFormat.Shape.STRING) // ISO-8601 compliant format
     private Instant time = Instant.now();
     private T data;
-    private String datacontenttype="application/json";
-    private String specversion="1.0";
+    private String correlationId;
 
     public Message() {
     }
@@ -75,6 +76,14 @@ public class Message<T> {
         return specversion;
     }
 
+    public String getCorrelationId() {
+        return correlationId;
+    }
+
+    public Message<T> setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
+        return this;
+    }
 
 }
 

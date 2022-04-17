@@ -12,4 +12,6 @@ public class PaymentResultEvent {
     private String paymentId;
     private boolean success;
     private String message;
+    private String debtorId;
+    private String creditorId;
 }

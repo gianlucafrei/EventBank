@@ -17,6 +17,10 @@ spring:
             consumer:
               configuration:
                 value.deserializer: com.example.eventbank.cards.dto.converters.MessageDeSerializer
+          notification-out-0:
+            producer:
+              configuration:
+                value.serializer: com.example.eventbank.cards.dto.converters.MessageSerializer
 
         binder:
           brokers: localhost:29092
@@ -30,6 +34,10 @@ spring:
           destination: payment-events
           consumer:
             use-native-decoding: true
+        notification-out-0:
+          destination: email-notification
+          producer:
+            useNativeEncoding: true
 
   jackson:
     serialization:

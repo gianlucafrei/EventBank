@@ -3,6 +3,7 @@ package com.example.eventbank.cards.service;
 import com.example.eventbank.cards.dto.PaymentEvent;
 import com.example.eventbank.cards.dto.PaymentRequest;
 import com.example.eventbank.cards.dto.PaymentResultEvent;
+import com.example.eventbank.cards.web.AccountsServiceAdapater;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -15,22 +16,15 @@ import java.util.UUID;
 public class CardPaymentSaga {
 
     private static final int MAX_RETRIES = 5;
-
-
-    public enum CardPaymentSagaStatus {
-        OPEN, RESERVING_AMOUNT, AWAITING_PAYMENT, SUCCESS, ERROR
-    }
-
     private final String paymentId;
+    private final PaymentRequest paymentRequest;
+    private final AccountsServiceAdapater accountsServiceAdapater;
     private CardPaymentSagaStatus status;
-    private PaymentRequest paymentRequest;
-    private AccountsServiceAdapater accountsServiceAdapater;
     private PaymentEvent paymentEvent;
     private Instant start, end;
-
     private int numberOfRetries = 0;
 
-    public CardPaymentSaga(PaymentRequest request, AccountsServiceAdapater accountsServiceAdapater){
+    public CardPaymentSaga(PaymentRequest request, AccountsServiceAdapater accountsServiceAdapater) {
         this.paymentRequest = request;
         this.accountsServiceAdapater = accountsServiceAdapater;
         this.paymentId = UUID.randomUUID().toString();
@@ -44,7 +38,7 @@ public class CardPaymentSaga {
     public void retry() throws Exception {
 
 
-        if(numberOfRetries >= MAX_RETRIES){
+        if (numberOfRetries >= MAX_RETRIES) {
             this.status = CardPaymentSagaStatus.ERROR;
             finish();
             log.warn("Saga maxed out in retries, paymentId={} This must be investigated manually", this.numberOfRetries, this.paymentId);
@@ -57,14 +51,13 @@ public class CardPaymentSaga {
         log.info("Saga Retry No. {}, PaymentId={}", this.numberOfRetries, this.paymentId);
 
         // We retry only the payment execution step
-        if(this.status == CardPaymentSagaStatus.AWAITING_PAYMENT){
+        if (this.status == CardPaymentSagaStatus.AWAITING_PAYMENT) {
 
             executePayment(this.paymentEvent);
         }
     }
 
-
-    public PaymentEvent startExecution(){
+    public PaymentEvent startExecution() {
 
         this.start = Instant.now();
 
@@ -75,11 +68,11 @@ public class CardPaymentSaga {
                 paymentRequest.getDestinationAccount(),
                 paymentRequest.getAmount());
 
-        try{
+        try {
 
             // Reserve amount only if payment is risky
             boolean isRisky = isRiskyPayment(paymentRequest);
-            if(isRisky){
+            if (isRisky) {
 
                 this.status = CardPaymentSagaStatus.RESERVING_AMOUNT;
                 reserveAmount(paymentEvent);
@@ -89,8 +82,7 @@ public class CardPaymentSaga {
             executePayment(paymentEvent);
             this.status = CardPaymentSagaStatus.AWAITING_PAYMENT;
             return paymentEvent;
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             log.warn("Payment saga failed: {}", ex);
         }
         return paymentEvent;
@@ -101,19 +93,18 @@ public class CardPaymentSaga {
         // Set status to success if payment result is successful
         // Otherwise we would here need to undo saga steps that already have been done
 
-        if(paymentResultEvent.isSuccess()){
+        if (paymentResultEvent.isSuccess()) {
             log.info("Payment succeeded after {} retries. PaymentId={}", this.numberOfRetries, this.paymentId);
             finish();
             this.status = CardPaymentSagaStatus.SUCCESS;
-        }
-        else{
+        } else {
             this.status = CardPaymentSagaStatus.ERROR;
             finish();
             log.warn("Received payment result with negative status for payment id={}: {}", paymentId, paymentResultEvent.getMessage());
         }
     }
 
-    private boolean isRiskyPayment(PaymentRequest paymentRequest){
+    private boolean isRiskyPayment(PaymentRequest paymentRequest) {
 
         return paymentRequest.getAmount() > 1000;
     }
@@ -123,16 +114,20 @@ public class CardPaymentSaga {
         accountsServiceAdapater.reserveAmount(paymentEvent.getSourceAccount(), paymentEvent.getAmount(), this.paymentId);
     }
 
-    private void executePayment(PaymentEvent paymentEvent) throws Exception{
+    private void executePayment(PaymentEvent paymentEvent) throws Exception {
 
         accountsServiceAdapater.sendPaymentEvent(paymentEvent);
     }
 
-    private void finish(){
+    private void finish() {
 
         this.end = Instant.now();
         Duration duration = Duration.between(this.start, this.end);
 
         log.info("Saga ended after {}ms, status={}, paymentid={}", duration.toMillis(), this.status, this.paymentId);
+    }
+
+    public enum CardPaymentSagaStatus {
+        OPEN, RESERVING_AMOUNT, AWAITING_PAYMENT, SUCCESS, ERROR
     }
 }

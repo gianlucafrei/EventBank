@@ -1,10 +1,10 @@
 server:
-  port : 8083
+  port: 8083
 
 spring:
   cloud:
     function:
-      definition: producer;consumer;globalConsumer
+      definition: consumer;
     stream:
       kafka:
         bindings:
@@ -20,7 +20,7 @@ spring:
       bindings:
 
         consumer-in-0:
-          destination: payment-events
+          destination: email-notification
           consumer:
             use-native-decoding: true
 

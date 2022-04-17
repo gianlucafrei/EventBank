@@ -13,29 +13,29 @@ import java.util.function.Consumer;
 @Log4j2
 public class MessagingAdapter {
 
+    private final ObjectMapper om = new ObjectMapper();
     @Autowired
     private PaymentsAdapter paymentsAdapter;
-    private ObjectMapper om = new ObjectMapper();
 
     @Bean
     public Consumer<Message> globalTest() {
 
-        return message -> consumeMessage(message);
+        return this::consumeMessage;
     }
 
-    public void consumeMessage(Message message){
+    public void consumeMessage(Message message) {
 
         log.info("New Message: {}", message);
 
-        try{
+        try {
 
-            if("paymentEvent".equals(message.getType())){
+            if ("paymentEvent".equals(message.getType())) {
 
                 String json = om.writeValueAsString(message.getData());
-                PaymentEvent event =  om.readValue(json, PaymentEvent.class);
+                PaymentEvent event = om.readValue(json, PaymentEvent.class);
                 paymentsAdapter.consumePaymentMessage(event);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Error while processing incoming message", ex);
         }
 

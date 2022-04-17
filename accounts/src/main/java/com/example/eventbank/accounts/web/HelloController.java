@@ -17,7 +17,7 @@ public class HelloController {
     private StreamBridge streamBridge;
 
     @GetMapping("/")
-    public String helloMessage(){
+    public String helloMessage() {
 
         Message<String> message = new Message("helloEvent", "Hello Endpoint was Called");
         streamBridge.send("global-out-0", message);

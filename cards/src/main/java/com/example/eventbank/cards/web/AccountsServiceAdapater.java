@@ -1,4 +1,4 @@
-package com.example.eventbank.cards.service;
+package com.example.eventbank.cards.web;
 
 import com.example.eventbank.cards.dto.Message;
 import com.example.eventbank.cards.dto.PaymentEvent;
@@ -22,12 +22,12 @@ public class AccountsServiceAdapater {
 
     @Autowired
     private StreamBridge streamBridge;
-    private HttpClient client = HttpClient.newHttpClient();
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final HttpClient client = HttpClient.newHttpClient();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private String accountServiceUri = "http://localhost:8081";
+    private final String accountServiceUri = "http://localhost:8081";
 
-    public void reserveAmount(String account, Integer amount, String paymentId) throws Exception{
+    public void reserveAmount(String account, Integer amount, String paymentId) throws Exception {
 
         // Make a json object with the account and amount
         HashMap<String, Object> body = new HashMap<>();
@@ -36,7 +36,7 @@ public class AccountsServiceAdapater {
 
         String bodyStr = objectMapper.writeValueAsString(body);
         URI uri = URI.create(
-                accountServiceUri + "/accounts/" + UriUtils.encodePath(account, "UTF-8") +"/reservations");
+                accountServiceUri + "/accounts/" + UriUtils.encodePath(account, "UTF-8") + "/reservations");
 
         // Send http request to the account service
         // Using the java http client library
@@ -48,14 +48,14 @@ public class AccountsServiceAdapater {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if(response.statusCode() != 200){
+        if (response.statusCode() != 200) {
 
             log.error("Error reserving amount. Status code {} uri {}", response.statusCode(), uri);
             throw new RuntimeException("Error reserving amount for payment");
         }
     }
 
-    public void sendPaymentEvent(PaymentEvent paymentEvent){
+    public void sendPaymentEvent(PaymentEvent paymentEvent) {
 
         Message message = new Message<>("paymentEvent", paymentEvent);
         streamBridge.send("payment-out-0", message);

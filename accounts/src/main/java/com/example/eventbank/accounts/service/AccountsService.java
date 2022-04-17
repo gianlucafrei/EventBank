@@ -60,12 +60,23 @@ public class AccountsService {
                     .withProcessor(processor)
                     .processAndPersist();
 
-            resultEvent = new PaymentResultEvent(command.getPaymentId(), true, "Payment stored");
+            resultEvent = new PaymentResultEvent(
+                    command.getPaymentId(),
+                    true,
+                    "Payment stored",
+                    command.getDebtorId(),
+                    command.getCreditorId());
+
         } catch (Exception ex) {
             log.warn("Exception during payment processing {}", ex);
-            resultEvent = new PaymentResultEvent(command.getPaymentId(), false, "Payment Failed: " + ex.getMessage());
-        }
 
+            resultEvent = new PaymentResultEvent(
+                    command.getPaymentId(),
+                    false,
+                    "Payment Failed: " + ex.getMessage(),
+                    command.getDebtorId(),
+                    command.getCreditorId());
+        }
 
         Message message = new Message<>("paymentResultEvent", resultEvent);
         streamBridge.send("payment-out-0", message);
