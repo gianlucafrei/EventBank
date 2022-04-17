@@ -77,10 +77,7 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-tomcat:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.55" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.55" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.55" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-validation:2.6.1" level="project" />
-    <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:6.2.0.Final" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.3.13" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.core:jersey-server:2.35" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.core:jersey-common:2.35" level="project" />
@@ -137,7 +134,6 @@
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-jpa:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.13" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.32" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:5.3.13" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.kafka:spring-kafka:2.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.13" level="project" />
@@ -206,5 +202,23 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.13" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.3.13" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.8.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.springframework.cloud:spring-cloud-stream:test-jar:test-binder:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-validation:2.6.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.55" level="project" />
+    <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:6.2.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.integration:spring-integration-core:5.5.6" level="project" />
+    <orderEntry type="library" name="Maven: io.projectreactor:reactor-core:3.4.12" level="project" />
+    <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.integration:spring-integration-jmx:5.5.6" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-function-context:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: net.jodah:typetools:0.6.2" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-function-core:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.kafka:kafka-streams:3.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.rocksdb:rocksdbjni:6.19.3" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.32" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-stream-binder-kafka:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-stream-binder-kafka-core:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.integration:spring-integration-kafka:5.5.6" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-stream:3.2.1" level="project" />
   </component>
 </module>

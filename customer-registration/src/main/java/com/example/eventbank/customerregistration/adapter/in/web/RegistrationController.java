@@ -29,6 +29,7 @@ public class RegistrationController {
 
         if (registrationProcessDto.getAccountId() == null) registrationProcessDto.initAccountId();
         if (registrationProcessDto.getMinimalBalance() == null) registrationProcessDto.initMinimumBalance();
+        if (registrationProcessDto.getWithCard() == null) registrationProcessDto.initWithCard();
 
         log.info("Dto: {}", registrationProcessDto);
 

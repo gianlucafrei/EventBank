@@ -19,6 +19,7 @@ public class RegistrationProcessDto implements Serializable {
     private String emailAddress;
     private String accountId;
     private Integer minimalBalance;
+    private Boolean withCard;
 
     public void initAccountId() {
         this.accountId = UUID.randomUUID().toString();
@@ -26,5 +27,9 @@ public class RegistrationProcessDto implements Serializable {
 
     public void initMinimumBalance() {
         this.minimalBalance = 0;
+    }
+
+    public void initWithCard() {
+        this.withCard = true;
     }
 }

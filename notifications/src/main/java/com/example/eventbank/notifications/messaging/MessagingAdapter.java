@@ -25,6 +25,7 @@ public class MessagingAdapter {
 
     @Bean
     public Consumer<Message<?>> consumer() {
+        log.info("The message is here");
         return this::consumeMessage;
     }
 

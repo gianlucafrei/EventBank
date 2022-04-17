@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/accounts/accounts-service.iml" filepath="$PROJECT_DIR$/accounts/accounts-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/cards/cards-service.iml" filepath="$PROJECT_DIR$/cards/cards-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/customer-registration/customer-registration.iml" filepath="$PROJECT_DIR$/customer-registration/customer-registration.iml" />
-      <module fileurl="file://$PROJECT_DIR$/customer/customer-service.iml" filepath="$PROJECT_DIR$/customer/customer-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/notifications/notification-service.iml" filepath="$PROJECT_DIR$/notifications/notification-service.iml" />
     </modules>
   </component>

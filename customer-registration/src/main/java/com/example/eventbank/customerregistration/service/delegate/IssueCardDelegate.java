@@ -2,7 +2,7 @@ package com.example.eventbank.customerregistration.service.delegate;
 
 import com.example.eventbank.customerregistration.adapter.out.messaging.IssueCardProducer;
 import com.example.eventbank.customerregistration.dto.Message;
-import com.example.eventbank.customerregistration.service.interf.IssueCardCommand;
+import com.example.eventbank.customerregistration.service.interf.IssueCardEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -20,7 +20,7 @@ public class IssueCardDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
 
-        Message<IssueCardCommand> message = new Message<>("IssueCardEvent", new IssueCardCommand(
+        Message<IssueCardEvent> message = new Message<>("IssueCardEvent", new IssueCardEvent(
                 delegateExecution.getVariable("firstName").toString(),
                 delegateExecution.getVariable("lastName").toString()
         ));

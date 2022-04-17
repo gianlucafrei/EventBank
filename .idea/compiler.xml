@@ -9,7 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="accounts-service" />
         <module name="cards-service" />
-        <module name="customer-service" />
         <module name="notification-service" />
       </profile>
       <profile name="Annotation profile for customer-registration-service" enabled="true">

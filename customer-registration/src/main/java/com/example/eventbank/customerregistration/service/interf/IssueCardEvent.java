@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class IssueCardCommand {
+public class IssueCardEvent {
 
     private String firstName;
     private String lastName;
