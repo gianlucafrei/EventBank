@@ -14,3 +14,4 @@ kafka:
   group-id: someGroupId
   trusted-packages: com.example.eventbank.customerregistration.dto
 
+account.uri: http://localhost:8081/accounts

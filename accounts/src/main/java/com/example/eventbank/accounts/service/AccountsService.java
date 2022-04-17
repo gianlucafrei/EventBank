@@ -21,26 +21,27 @@ import java.util.stream.Collectors;
 @Log4j2
 public class AccountsService {
 
+    private final EventLog eventLog;
+    private final AccountServiceState state = new AccountServiceState();
     @Autowired
     private StreamBridge streamBridge;
 
-    private EventLog eventLog;
-    private AccountServiceState state = new AccountServiceState();
-
     @Autowired
-    public AccountsService(EventLog eventLog){
+    public AccountsService(EventLog eventLog) {
         this.eventLog = eventLog;
     }
 
-    public void createNewAccount(NewAccountCommand command){
+    public void createNewAccount(NewAccountCommand command) throws Exception {
 
         TriConsumer<NewAccountCommand, AccountServiceState, String> processor = this::createNewAccountProcessor;
         eventLog.createEvent(command, state).withProcessor(processor).processAndPersist();
+
+        log.info("New Account created: {}", command);
     }
 
-    private void createNewAccountProcessor(NewAccountCommand newAccountCommand, AccountServiceState state, String eventId){
+    private void createNewAccountProcessor(NewAccountCommand newAccountCommand, AccountServiceState state, String eventId) throws IllegalStateException {
 
-        if(state.accounts.containsKey(newAccountCommand.getAccountId())){
+        if (state.accounts.containsKey(newAccountCommand.getAccountId())) {
             throw new IllegalStateException("Account already exists");
         }
 
@@ -48,20 +49,19 @@ public class AccountsService {
         state.accounts.put(newAccountCommand.getAccountId(), account);
     }
 
-    public void executePayment(PaymentCommand command){
+    public void executePayment(PaymentCommand command) {
 
         TriConsumer<PaymentCommand, AccountServiceState, String> processor = this::paymentProcessor;
 
         PaymentResultEvent resultEvent;
-        try{
+        try {
             eventLog.createEvent(command, state)
                     .withIdempotence(command.getPaymentId())
                     .withProcessor(processor)
                     .processAndPersist();
 
             resultEvent = new PaymentResultEvent(command.getPaymentId(), true, "Payment stored");
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             log.warn("Exception during payment processing {}", ex);
             resultEvent = new PaymentResultEvent(command.getPaymentId(), false, "Payment Failed: " + ex.getMessage());
         }
@@ -72,13 +72,13 @@ public class AccountsService {
         log.info("Sent paymentResultEvent to payment-out-0 via StreamBridge");
     }
 
-    private void paymentProcessor(PaymentCommand paymentCommand, AccountServiceState state, String eventId){
+    private void paymentProcessor(PaymentCommand paymentCommand, AccountServiceState state, String eventId) {
 
-        if(!state.accounts.containsKey(paymentCommand.getCreditorId())){
+        if (!state.accounts.containsKey(paymentCommand.getCreditorId())) {
             throw new IllegalStateException("Creditor account does not exist");
         }
 
-        if(!state.accounts.containsKey(paymentCommand.getDebtorId())){
+        if (!state.accounts.containsKey(paymentCommand.getDebtorId())) {
             throw new IllegalStateException("Debitor account does not exist");
         }
 
@@ -87,46 +87,44 @@ public class AccountsService {
 
         // Execute Payment
         int availableBalance = debitor.availableBalance();
-        if(availableBalance >= paymentCommand.getAmount()){
+        if (availableBalance >= paymentCommand.getAmount()) {
 
             debitor.balance -= paymentCommand.getAmount();
             creditor.balance += paymentCommand.getAmount();
 
-        }
-        else{
+        } else {
             throw new InsufficientAccountLimitException();
         }
     }
 
-    public void reserveAmount(ReserveBalanceCommand command){
+    public void reserveAmount(ReserveBalanceCommand command) {
 
         TriConsumer<ReserveBalanceCommand, AccountServiceState, String> processor = this::reserveAmountProcessor;
         eventLog.createEvent(command, state).withProcessor(processor).processAndPersist();
     }
 
-    private void reserveAmountProcessor(ReserveBalanceCommand reserveBalanceCommand, AccountServiceState state, String eventId){
+    private void reserveAmountProcessor(ReserveBalanceCommand reserveBalanceCommand, AccountServiceState state, String eventId) {
 
-        if(!state.accounts.containsKey(reserveBalanceCommand.getAccountId())){
+        if (!state.accounts.containsKey(reserveBalanceCommand.getAccountId())) {
             throw new AccountDoesNotExistException();
         }
 
         Account account = state.accounts.get(reserveBalanceCommand.getAccountId());
         int availableBalance = account.availableBalance();
 
-        if(availableBalance > reserveBalanceCommand.getAmount()){
+        if (availableBalance > reserveBalanceCommand.getAmount()) {
 
             Reservation reservation = new Reservation(reserveBalanceCommand.getAmount());
             account.addReservation(reservation);
-        }
-        else {
+        } else {
 
             throw new InsufficientAccountLimitException();
         }
     }
 
-    public BalanceQueryResult queryBalance(BalanceQuery query){
+    public BalanceQueryResult queryBalance(BalanceQuery query) {
 
-        if(!state.accounts.containsKey(query.getAccountId())){
+        if (!state.accounts.containsKey(query.getAccountId())) {
             throw new IllegalStateException("Account id does not exist");
         }
 
@@ -137,7 +135,7 @@ public class AccountsService {
         return result;
     }
 
-    public AllAccountsQueryResult queryAllAccounts(AllAccountsQuery query){
+    public AllAccountsQueryResult queryAllAccounts(AllAccountsQuery query) {
 
         Set<BalanceQueryResult> results = state.accounts.entrySet()
                 .stream().map(entry -> new BalanceQueryResult(entry.getKey(), entry.getValue().getBalance(), entry.getValue().availableBalance()))
@@ -145,14 +143,14 @@ public class AccountsService {
         return new AllAccountsQueryResult(results);
     }
 
-    private static class AccountServiceState{
+    private static class AccountServiceState {
 
-        private HashMap<String, Account> accounts = new HashMap<>();
+        private final HashMap<String, Account> accounts = new HashMap<>();
 
     }
 
     @Data
-    private static class Account{
+    private static class Account {
 
         private Integer balance;
         private Integer minimalBalance;
@@ -165,12 +163,12 @@ public class AccountsService {
             this.reservations = new HashSet<>();
         }
 
-        public Integer availableBalance(){
+        public Integer availableBalance() {
 
             return balance - minimalBalance - totalReservedAmount();
         }
 
-        public Integer totalReservedAmount(){
+        public Integer totalReservedAmount() {
 
             return reservations.stream().mapToInt(r -> r.amount).sum();
         }
@@ -182,12 +180,12 @@ public class AccountsService {
     }
 
     @Data
-    private static class Reservation{
+    private static class Reservation {
 
         private Integer amount;
         private String id;
 
-        public Reservation(Integer amount){
+        public Reservation(Integer amount) {
             this.amount = amount;
             this.id = UUID.randomUUID().toString();
         }

@@ -1,6 +1,5 @@
 package com.example.eventbank.accounts;
 
-import com.example.eventbank.accounts.eventLog.EventLog;
 import com.example.eventbank.accounts.service.AccountsService;
 import com.example.eventbank.accounts.service.interf.NewAccountCommand;
 import io.swagger.v3.oas.models.Components;
@@ -34,7 +33,7 @@ public class AccountsApplication {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    public void runAfterStartup() {
+    public void runAfterStartup() throws Exception {
 
         // Create some default accounts
         accountsService.createNewAccount(new NewAccountCommand("account1", -10_000_000));

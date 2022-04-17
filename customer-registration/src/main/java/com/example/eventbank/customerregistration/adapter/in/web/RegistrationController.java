@@ -27,8 +27,12 @@ public class RegistrationController {
     @PostMapping("/apply")
     public ResponseEntity<String> applyForRegistration(@RequestBody RegistrationProcessDto registrationProcessDto) {
 
-        String correlationId = UUID.randomUUID().toString();
+        if (registrationProcessDto.getAccountId() == null) registrationProcessDto.initAccountId();
+        if (registrationProcessDto.getMinimalBalance() == null) registrationProcessDto.initMinimumBalance();
 
+        log.info("Dto: {}", registrationProcessDto);
+
+        String correlationId = UUID.randomUUID().toString();
         Message<RegistrationProcessDto> message = new Message<>("RegistrationProcess", registrationProcessDto)
                 .setCorrelationId(correlationId);
 

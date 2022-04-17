@@ -2,19 +2,18 @@ package com.example.eventbank.accounts.service;
 
 import com.example.eventbank.accounts.eventLog.EventLog;
 import com.example.eventbank.accounts.service.interf.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AccountsServiceTest {
 
 
-
     @Test
-    public void testPayment(){
+    public void testPayment() throws Exception {
 
         // Arrange
         EventLog eventLog = new EventLog();
@@ -23,7 +22,7 @@ class AccountsServiceTest {
         service.createNewAccount(new NewAccountCommand("account2", 0));
 
         // ACT
-        service.executePayment(new PaymentCommand("somepaymentid","account1", "account2", 20, Optional.empty()));
+        service.executePayment(new PaymentCommand("somepaymentid", "account1", "account2", 20, Optional.empty()));
 
         // Assert
         BalanceQueryResult account1 = service.queryBalance(new BalanceQuery("account1"));
@@ -33,7 +32,7 @@ class AccountsServiceTest {
     }
 
     @Test
-    public void testReservation(){
+    public void testReservation() throws Exception {
 
         // Arrange
         EventLog eventLog = new EventLog();
@@ -45,11 +44,11 @@ class AccountsServiceTest {
         service.reserveAmount(new ReserveBalanceCommand("account1", 50));
 
         // This should work
-        service.executePayment(new PaymentCommand("somepaymentid","account1", "account2", 40, Optional.empty()));
+        service.executePayment(new PaymentCommand("somepaymentid", "account1", "account2", 40, Optional.empty()));
 
         // But not a second time
         assertThrows(InsufficientAccountLimitException.class, () -> {
-            service.executePayment(new PaymentCommand("somepaymentid","account1", "account2", 40, Optional.empty()));
+            service.executePayment(new PaymentCommand("somepaymentid", "account1", "account2", 40, Optional.empty()));
         });
     }
 }
