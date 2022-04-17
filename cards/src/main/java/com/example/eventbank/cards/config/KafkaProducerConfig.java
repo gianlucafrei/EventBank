@@ -1,7 +1,7 @@
-package com.example.eventbank.customerregistration.config;
+package com.example.eventbank.cards.config;
 
-import com.example.eventbank.customerregistration.dto.Message;
-import com.example.eventbank.customerregistration.dto.converters.MessageSerializer;
+import com.example.eventbank.cards.dto.Message;
+import com.example.eventbank.cards.dto.converters.MessageSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,8 +21,6 @@ public class KafkaProducerConfig {
     @Value(value = "${kafka.bootstrap-address}")
     private String bootstrapAddress;
 
-    @Value(value = "${kafka.trusted-packages}")
-    private String trustedPackage;
 
     @Bean
     public ProducerFactory<String, Message<?>> producerFactory() {
@@ -36,7 +34,7 @@ public class KafkaProducerConfig {
         props.put(
                 ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 MessageSerializer.class);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return new DefaultKafkaProducerFactory<>(props);
     }
 

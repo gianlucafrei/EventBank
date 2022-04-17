@@ -11,9 +11,9 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CamundaMessageDto implements Serializable {
+public class CamundaMessageDto<T> implements Serializable {
 
     private String correlationId;
-    private RegistrationProcessDto dto;
+    private T dto;
 
 }

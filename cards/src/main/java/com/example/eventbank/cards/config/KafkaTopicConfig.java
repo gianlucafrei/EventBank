@@ -1,4 +1,4 @@
-package com.example.eventbank.customerregistration.config;
+package com.example.eventbank.cards.config;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -24,23 +24,12 @@ public class KafkaTopicConfig {
     }
 
     @Bean
-    public NewTopic startProcessMessageTopic() {
-
-        return new NewTopic("start-process-message-topic", 1, (short) 1);
-    }
-
-    @Bean
-    public NewTopic intermediateMessageTopic() {
+    public NewTopic issueCardMessageTopic() {
         return new NewTopic("issue-card-message-topic", 1, (short) 1);
     }
 
     @Bean
     public NewTopic notifyCardIssuedTopic() {
         return new NewTopic("notify-card-issued-topic", 1, (short) 1);
-    }
-
-    @Bean
-    public NewTopic serviceTaskMessageTopic() {
-        return new NewTopic("service-task-message-topic", 1, (short) 1);
     }
 }

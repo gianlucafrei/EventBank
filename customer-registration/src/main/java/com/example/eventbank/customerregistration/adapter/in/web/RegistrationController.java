@@ -1,12 +1,12 @@
-package com.example.eventbank.customerregistration.web;
+package com.example.eventbank.customerregistration.adapter.in.web;
 
-import com.example.eventbank.customerregistration.consumer.MessageService;
-import com.example.eventbank.customerregistration.dto.CamundaMessageDto;
+import com.example.eventbank.customerregistration.dto.Message;
 import com.example.eventbank.customerregistration.dto.RegistrationProcessDto;
+import com.example.eventbank.customerregistration.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +17,11 @@ import java.util.UUID;
 @RestController()
 @RequestMapping("/registration")
 @RequiredArgsConstructor
+@Slf4j
 public class RegistrationController {
 
     private final static String MESSAGE_START = "MessageApply";
 
-    private final KafkaTemplate<String, CamundaMessageDto> kafkaTemplate;
     private final MessageService messageService;
 
     @PostMapping("/apply")
@@ -29,21 +29,16 @@ public class RegistrationController {
 
         String correlationId = UUID.randomUUID().toString();
 
-        CamundaMessageDto camundaMessageDto = CamundaMessageDto.builder()
-                .correlationId(correlationId).dto(registrationProcessDto).build();
+        Message<RegistrationProcessDto> message = new Message<>("RegistrationProcess", registrationProcessDto)
+                .setCorrelationId(correlationId);
 
         try {
-            messageService.correlateMessage(camundaMessageDto, MESSAGE_START);
+            messageService.correlateMessage(message, MESSAGE_START);
 
             return new ResponseEntity<>(correlationId, HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             return new ResponseEntity<>("There appears to be an issue with the application", HttpStatus.NOT_ACCEPTABLE);
         }
-    }
-
-    @PostMapping("/intermediate")
-    public void correlateIntermediateMessage(@RequestBody String correlationId) {
-        kafkaTemplate.send("intermediate-message-topic", CamundaMessageDto.builder().correlationId(correlationId).build());
     }
 
 }

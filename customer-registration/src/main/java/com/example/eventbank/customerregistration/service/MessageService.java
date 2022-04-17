@@ -1,6 +1,6 @@
-package com.example.eventbank.customerregistration.consumer;
+package com.example.eventbank.customerregistration.service;
 
-import com.example.eventbank.customerregistration.dto.CamundaMessageDto;
+import com.example.eventbank.customerregistration.dto.Message;
 import com.example.eventbank.customerregistration.util.VariablesUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,23 +19,27 @@ public class MessageService {
 
     private final RuntimeService runtimeService;
 
-    public MessageCorrelationResult correlateMessage(CamundaMessageDto camundaMessageDto, String messageName) {
+    public MessageCorrelationResult correlateMessage(Message<?> message, String messageName) {
         try {
             log.info("Consuming message {}", messageName);
 
             MessageCorrelationBuilder messageCorrelationBuilder = runtimeService.createMessageCorrelation(messageName);
 
-            if (camundaMessageDto.getDto() != null) {
-                messageCorrelationBuilder.setVariables(VariablesUtil.toVariableMap(camundaMessageDto.getDto()));
+            if (message.getData() != null) {
+                messageCorrelationBuilder.setVariables(VariablesUtil.toVariableMap(message.getData()));
             }
 
-            MessageCorrelationResult messageResult = messageCorrelationBuilder.processInstanceBusinessKey(camundaMessageDto.getCorrelationId())
+            log.info("Using correlation key: {}", message.getCorrelationId());
+
+            MessageCorrelationResult messageResult = messageCorrelationBuilder
+                    .processInstanceBusinessKey(message.getCorrelationId())
                     .correlateWithResult();
 
-            String messageResultJson = new ObjectMapper().writeValueAsString(MessageCorrelationResultDto.fromMessageCorrelationResult(messageResult));
+            String messageResultJson = new ObjectMapper()
+                    .writeValueAsString(MessageCorrelationResultDto.fromMessageCorrelationResult(messageResult));
 
             log.info("Correlation successful. Process Instance Id: {}", messageResultJson);
-            log.info("Correlation key used: {}", camundaMessageDto.getCorrelationId());
+            log.info("Correlation key used: {}", message.getCorrelationId());
 
             return messageResult;
         } catch (MismatchingMessageCorrelationException e) {

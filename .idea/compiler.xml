@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="accounts-service" />
         <module name="cards-service" />
+        <module name="customer-service" />
         <module name="notification-service" />
       </profile>
       <profile name="Annotation profile for customer-registration-service" enabled="true">
@@ -25,6 +26,7 @@
       <module name="accounts-service" target="15" />
       <module name="cards-service" target="15" />
       <module name="customer-registration" target="15" />
+      <module name="customer-service" target="15" />
       <module name="notification-service" target="15" />
       <module name="onboarding" target="1.8" />
     </bytecodeTargetLevel>
@@ -34,6 +36,7 @@
       <module name="accounts-service" options="-parameters" />
       <module name="cards-service" options="-parameters" />
       <module name="customer-registration" options="-parameters" />
+      <module name="customer-service" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="onboarding" options="-parameters" />
     </option>

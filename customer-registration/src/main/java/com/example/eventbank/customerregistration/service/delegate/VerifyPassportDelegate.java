@@ -1,19 +1,18 @@
-package com.example.eventbank.customerregistration.delegate;
+package com.example.eventbank.customerregistration.service.delegate;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-@Component
+@Service("VerifyPassportDelegate")
 @Slf4j
 @RequiredArgsConstructor
-public class PassportVerification implements JavaDelegate {
+public class VerifyPassportDelegate implements JavaDelegate {
 
     private static final String SWISS_PASSPORT = "X\\d{7,}";
 

@@ -1,5 +1,5 @@
 server:
-  port : 8082
+  port: 8082
 
 spring:
   cloud:
@@ -34,3 +34,7 @@ spring:
   jackson:
     serialization:
       write-dates-as-timestamps: false
+
+kafka:
+  bootstrap-address: localhost:9092
+  group-id: someGroupId

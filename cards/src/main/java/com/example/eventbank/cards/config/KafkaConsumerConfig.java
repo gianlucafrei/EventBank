@@ -1,7 +1,7 @@
-package com.example.eventbank.customerregistration.config;
+package com.example.eventbank.cards.config;
 
-import com.example.eventbank.customerregistration.dto.Message;
-import com.example.eventbank.customerregistration.dto.converters.MessageDeSerializer;
+import com.example.eventbank.cards.dto.Message;
+import com.example.eventbank.cards.dto.converters.MessageDeSerializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,9 +26,6 @@ public class KafkaConsumerConfig {
     @Value(value = "${kafka.group-id}")
     private String groupId;
 
-    @Value(value = "${kafka.trusted-packages}")
-    private String trustedPackage;
-
     @Bean
     public ConsumerFactory<String, Message<?>> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
@@ -44,7 +41,7 @@ public class KafkaConsumerConfig {
         props.put(
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 MessageDeSerializer.class);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
