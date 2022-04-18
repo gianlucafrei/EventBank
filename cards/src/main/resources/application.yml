@@ -1,10 +1,10 @@
 server:
-  port : 8082
+  port: 8082
 
 spring:
   cloud:
     function:
-      definition: producer;consumer;globalConsumer
+      definition: producer;consumer;issueCard
     stream:
       kafka:
         bindings:
@@ -13,10 +13,26 @@ spring:
             producer:
               configuration:
                 value.serializer: com.example.eventbank.cards.dto.converters.MessageSerializer
+
           consumer-in-0:
             consumer:
               configuration:
                 value.deserializer: com.example.eventbank.cards.dto.converters.MessageDeSerializer
+
+          notification-out-0:
+            producer:
+              configuration:
+                value.serializer: com.example.eventbank.cards.dto.converters.MessageSerializer
+
+          issueCard-out-0:
+            producer:
+              configuration:
+                value.serializer: com.example.eventbank.customerregistration.dto.converters.MessageSerializer
+
+            issueCard-in-0:
+              consumer:
+                configuration:
+                  value.deserializer: com.example.eventbank.customerregistration.dto.converters.MessageDeSerializer
 
         binder:
           brokers: localhost:29092
@@ -26,10 +42,26 @@ spring:
           destination: payment-events
           producer:
             useNativeEncoding: true
+
         consumer-in-0:
           destination: payment-events
           consumer:
             use-native-decoding: true
+
+        notification-out-0:
+          destination: notification-events
+          producer:
+            useNativeEncoding: true
+
+        issueCard-out-0:
+          destination: issue-card-events
+          producer:
+            useNativeEncoding: true
+
+          issueCard-in-0:
+            destination: issue-card-events
+            consumer:
+              use-native-decoding: true
 
   jackson:
     serialization:

@@ -3,8 +3,11 @@ package com.example.eventbank.cards.service;
 import com.example.eventbank.cards.dto.PaymentEvent;
 import com.example.eventbank.cards.dto.PaymentRequest;
 import com.example.eventbank.cards.dto.PaymentResultEvent;
+import com.example.eventbank.cards.dto.PhoneNotificationEvent;
+import com.example.eventbank.cards.messaging.NotificationProducer;
+import com.example.eventbank.cards.web.AccountsServiceAdapater;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,17 +20,17 @@ import java.util.stream.Collectors;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class CardPaymentService {
 
-    @Autowired
-    AccountsServiceAdapater accountsServiceAdapater;
-
+    private final AccountsServiceAdapater accountsServiceAdapater;
+    private final NotificationProducer notificationProducer;
     public Map<String, CardPaymentSaga> cardPaymentSagas = new ConcurrentHashMap<>();
 
     public PaymentEvent processPayment(PaymentRequest paymentRequest) throws Exception {
 
         // Return 401 status if payment is not authorized
-        if(! checkPaymentAuthorization(paymentRequest)){
+        if (!checkPaymentAuthorization(paymentRequest)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Payment is not authorized");
         }
 
@@ -39,9 +42,9 @@ public class CardPaymentService {
         return saga.startExecution();
     }
 
-    public void handlePaymentResultEvent(PaymentResultEvent paymentResultEvent){
+    public void handlePaymentResultEvent(PaymentResultEvent paymentResultEvent) {
 
-        if(! cardPaymentSagas.containsKey(paymentResultEvent.getPaymentId())){
+        if (!cardPaymentSagas.containsKey(paymentResultEvent.getPaymentId())) {
             log.warn("Received payment result but have no payment sage matching");
             return;
         }
@@ -49,10 +52,16 @@ public class CardPaymentService {
         CardPaymentSaga saga = cardPaymentSagas.get(paymentResultEvent.getPaymentId());
 
         saga.receivedPaymentResult(paymentResultEvent);
+
+        notificationProducer.sendPhoneNotification(new PhoneNotificationEvent(
+                paymentResultEvent.getDebtorId(),
+                paymentResultEvent.getPaymentId(),
+                paymentResultEvent.getMessage()
+        ));
     }
 
     @Scheduled(fixedRate = 1000)
-    public void checkOpenPaymentSagas(){
+    public void checkOpenPaymentSagas() {
 
         List<CardPaymentSaga> openSagas = cardPaymentSagas.values().stream()
                 .filter(s -> s.isOpen())
@@ -70,7 +79,7 @@ public class CardPaymentService {
     }
 
     // Method for checking payment authorization
-    private boolean checkPaymentAuthorization(PaymentRequest paymentRequest){
+    private boolean checkPaymentAuthorization(PaymentRequest paymentRequest) {
 
         // Mock: If authorizationCode is null return false else default to true
         return paymentRequest.getAuthorizationCode() != null;

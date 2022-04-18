@@ -1,6 +1,5 @@
 package com.example.eventbank.accounts;
 
-import com.example.eventbank.accounts.eventLog.EventLog;
 import com.example.eventbank.accounts.service.AccountsService;
 import com.example.eventbank.accounts.service.interf.NewAccountCommand;
 import io.swagger.v3.oas.models.Components;
@@ -12,10 +11,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
+@EnableAsync
 public class AccountsApplication {
 
     @Autowired
@@ -34,7 +35,7 @@ public class AccountsApplication {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    public void runAfterStartup() {
+    public void runAfterStartup() throws Exception {
 
         // Create some default accounts
         accountsService.createNewAccount(new NewAccountCommand("account1", -10_000_000));
