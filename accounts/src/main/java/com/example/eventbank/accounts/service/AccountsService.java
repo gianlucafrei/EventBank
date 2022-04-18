@@ -154,6 +154,11 @@ public class AccountsService {
         return new AllAccountsQueryResult(results);
     }
 
+    public void removeAccount(String id) {
+        // Not implemented yet. -> Should be removing the account from the EventLog
+        log.info("Removing account with id: {}", id);
+    }
+
     private static class AccountServiceState {
 
         private final HashMap<String, Account> accounts = new HashMap<>();

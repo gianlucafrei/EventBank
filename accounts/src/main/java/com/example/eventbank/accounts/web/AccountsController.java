@@ -50,6 +50,17 @@ public class AccountsController {
         return result;
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removeAccount(@PathVariable String id) {
+        try {
+            accountsService.removeAccount(id);
+
+            return new ResponseEntity<>("Account removed", HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>("Account could not be removed", HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/{id}/payments")
     public void createPayment(@PathVariable String id, @RequestBody PaymentDto paymentDto) {
 

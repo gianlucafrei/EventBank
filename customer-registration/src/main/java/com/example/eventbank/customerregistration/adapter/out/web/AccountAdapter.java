@@ -48,4 +48,21 @@ public class AccountAdapter {
             throw new RuntimeException("Http Request failed");
         }
     }
+
+    public void removeAccount(String accountId) {
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(accountUri + "/" + accountId))
+                .DELETE()
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            log.info("Accounts deletion response: {}", response);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Http Request failed");
+        }
+    }
 }
