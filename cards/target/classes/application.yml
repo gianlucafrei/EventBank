@@ -7,6 +7,7 @@ spring:
       definition: producer;consumer;issueCard
     stream:
       kafka:
+
         bindings:
 
           payment-out-0:
@@ -66,7 +67,3 @@ spring:
   jackson:
     serialization:
       write-dates-as-timestamps: false
-
-kafka:
-  bootstrap-address: localhost:9092
-  group-id: someGroupId

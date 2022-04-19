@@ -157,14 +157,87 @@ multiple other benefits. However, in my opinion Spring Kafka was a bit simpler a
 
 As in lab03 we follow the [Cloud Events](https://cloudevents.io/) specification for all messages.
 
-## Experiments with Kafka (E1)
+## Experiments with Kafka: Delivery Guarantees (E1)
 
-Ideas:
- - the impact of load on processing latency,
- - the risk of data loss due to dropped messages,
- - the outage of Zookeeper,
- - the risk of data loss due to consumer lag,
- - the risk of data loss due to offset misconfigurations.
- - investigate the behavior of Kafka, producers and consumers
-   with multiple brokers, consumers and consumer groups, topics and partitions, as well as acknowledgment
-   configurations
+Our experiment is about the delivery guarantee of messages when using Kafka as the message broker.
+When communicating between microservices it is crucial to answer following questions: 
+- Are we required to guarantee the processing of all messages?
+- How can we guarantee the processing fo all messages?
+- Do we need to handle or avoid duplicate messages?
+
+These questions are also very significant in our project. During a payment scenario it might be beneficial to
+guarantee that a message arrives and gets processed exactly one time at the receivers side. While a notification
+does not need that guarantee as it is only informative for the customer. With Apache Kafka we have three different 
+types of message guarantees supported; at most once, at least once, and exactly once. Which delivery method we 
+use has an impact on the consumer and producer configurations as well as the performance of the message deliveries. 
+Here, we explore this three methods and test the different performances using consumer and producer of our payment topic.
+
+### At most once
+With the at most once guarantee the message is sent only once. Hence, it is processed
+once or not at all. In Kafka the consumer will read messages from the topic and immediately
+commit them before the processing starts. Thus, the unprocessed messages will be lost in case the 
+consumer fails. 
+
+At most once is the default behaviour in Kafka. No additional setup is needed. 
+It is indicated with the `isolation.level=read_uncommitted` configuration.
+
+The at most once delivery guarantee is the most performant method. In our case it did however not vary
+much with the at least once guarantee. Since, no payment failures were indicated this is not surprising. Even
+with higher loads we could not produce any messaging errors. 
+
+
+### At least once
+With the at least once delivery guarantee a message will be received and processed at least one time. 
+However, in case of failures you might process some messages additional times. In Kafka this is ensured 
+with acks from the Kafka broker. These must be received by the producer before he can write different 
+messages to the topic again. A duplication of the message can happen because the producer often writes 
+messages in batches which will be retried in case of a missing Ack.
+
+The at least once delivery guarantee has no predefined configuration label in Kafka. Hence, the setup is 
+the most complicated. We can define is using these configurations in the producer binding configurations:
+
+      enable.idempotence: true
+      max.in.flight.requests.per.connection: 1
+      retries: 999
+      acks: all
+
+And these consumer binding configurations:
+
+      enable.auto.commit: false
+
+At least once delivery guarantee is in theory less performant than the at most once delivery. However, in our case
+the duration of the payments under load is only slightly slower using this method. 
+
+
+### Exactly once
+
+With the exactly once guarantee we can make sure that a message is processed once, and only once. Kafka uses a 
+special feature called the Kafka Transactions to ensure this delivery guarantee. A producer writes multiple messages to the 
+topics and makes an atomic commit using a commit marker in case of success or abort marker if something went wrong 
+in any of the messages. The consumer in turn will only read messages once we have a commit marker. In case of an abort marker, 
+no message from this commit will be processed. 
+
+The exactly once delivery method can be defined in the producer and consumer binding configurations using:
+
+      isolation.level: read_committed
+
+Setting the isolation level to read_committed will change these additional settings automatically:
+
+      retries=Integer.MAX_VALUE
+      enable.idempotence=true
+      max.in.flight.requests.per.connection=1
+
+Exactly once delivery is the slowest but also most reliable method. In our case it was about 20% slower than the
+other methods. 
+
+
+### Comparison
+
+The comparison is done using sending payment operations to the HTTP endpoint. We used jMeter for the execution 
+of these requests. The execution time is measured to the point were the last payment notification is registered.
+
+|               | Requests | Failures | Execution Time |
+|---------------|----------|----------|----------------|
+| At most once  |  25,000  |     0    |    3:08 min    |
+| At least once |  25,000  |     0    |    3:13 min    |
+| Exactly once  |  25,000  |     0    |    3:46 min    |

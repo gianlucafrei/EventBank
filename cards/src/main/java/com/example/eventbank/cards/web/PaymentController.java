@@ -1,19 +1,14 @@
 package com.example.eventbank.cards.web;
 
-import com.example.eventbank.cards.dto.Message;
-import com.example.eventbank.cards.dto.PaymentEvent;
 import com.example.eventbank.cards.dto.PaymentRequest;
 import com.example.eventbank.cards.service.CardPaymentService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @Log4j2
 @RestController
@@ -23,10 +18,10 @@ public class PaymentController {
     CardPaymentService cardPaymentService;
 
     @PostMapping("/payment")
-    public ResponseEntity payment(@RequestBody PaymentRequest paymentRequest){
+    public ResponseEntity payment(@RequestBody PaymentRequest paymentRequest) {
 
         // Return 400 status if payment is not valid
-        if(! validatePayment(paymentRequest)){
+        if (!validatePayment(paymentRequest)) {
             return new ResponseEntity("Payment is not valid", HttpStatus.BAD_REQUEST);
         }
 
@@ -42,23 +37,20 @@ public class PaymentController {
     }
 
     // Validate payment
-    private boolean validatePayment(PaymentRequest paymentRequest){
+    private boolean validatePayment(PaymentRequest paymentRequest) {
 
         // Check if amount is not smaller than 0
-        if(paymentRequest.getAmount() < 0){
+        if (paymentRequest.getAmount() < 0) {
             return false;
         }
 
         // Check if source account is not null
-        if(paymentRequest.getSourceAccount() == null){
+        if (paymentRequest.getSourceAccount() == null) {
             return false;
         }
 
         // Check if destination account is not null
-        if(paymentRequest.getDestinationAccount() == null){
-            return false;
-        }
-        return true;
+        return paymentRequest.getDestinationAccount() != null;
     }
 
 }

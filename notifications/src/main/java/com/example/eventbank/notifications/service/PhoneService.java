@@ -10,7 +10,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class PhoneService {
 
+    private static int counter_failure = 0;
+    private static int counter = 0;
+
     public void sendNotification(PhoneNotificationEvent phoneNotificationEvent) {
-        log.info("Payment {}: {}", phoneNotificationEvent.getPaymentId(), phoneNotificationEvent.getMessage());
+        if (phoneNotificationEvent.getMessage().contains("Failed")) {
+            counter_failure++;
+        }
+        log.info("[{}/{}] Payment {}: {}", counter_failure, ++counter,
+                phoneNotificationEvent.getPaymentId(), phoneNotificationEvent.getMessage());
     }
 }

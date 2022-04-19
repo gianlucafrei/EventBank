@@ -8,7 +8,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Service;
 
 
-@Service("CreateAccountDelegate")
+@Service("DeleteAccountDelegate")
 @Slf4j
 @RequiredArgsConstructor
 public class DeleteAccountDelegate implements JavaDelegate {

@@ -18,28 +18,28 @@ public class MessagingAdapter {
     @Autowired
     private CardPaymentService cardPaymentService;
 
-    private ObjectMapper om = new ObjectMapper();
+    private final ObjectMapper om = new ObjectMapper();
 
     @Bean
-    public Consumer<Message> globalTest() {
+    public Consumer<Message> consumer() {
 
-        return message -> consumeMessage(message);
+        return this::consumeMessage;
     }
 
-    public void consumeMessage(Message message){
+    public void consumeMessage(Message message) {
 
         log.info("New Message: {}", message);
 
-        try{
+        try {
 
-            if("paymentResultEvent".equals(message.getType())){
+            if ("paymentResultEvent".equals(message.getType())) {
 
                 String json = om.writeValueAsString(message.getData());
-                PaymentResultEvent event =  om.readValue(json, PaymentResultEvent.class);
+                PaymentResultEvent event = om.readValue(json, PaymentResultEvent.class);
                 cardPaymentService.handlePaymentResultEvent(event);
 
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Error while processing incoming message", ex);
         }
 

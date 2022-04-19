@@ -7,6 +7,7 @@ spring:
       definition: producer;consumer;issueCard
     stream:
       kafka:
+
         bindings:
 
           payment-out-0:

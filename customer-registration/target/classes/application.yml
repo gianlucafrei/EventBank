@@ -9,11 +9,6 @@ camunda.bpm:
     password: demo
   filter.create: All Tasks
 
-kafka:
-  bootstrap-address: localhost:9092
-  group-id: someGroupId
-  trusted-packages: com.example.eventbank.customerregistration.dto
-
 account.uri: http://localhost:8081/accounts
 
 spring:
