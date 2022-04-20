@@ -17,8 +17,9 @@ public class MessagingAdapter {
     @Autowired
     private PaymentsAdapter paymentsAdapter;
 
+
     @Bean
-    public Consumer<Message> globalTest() {
+    public Consumer<Message> paymentRequest() {
 
         return this::consumeMessage;
     }

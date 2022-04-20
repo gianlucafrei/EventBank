@@ -15,16 +15,16 @@ import java.util.function.Consumer;
 @Log4j2
 public class MessagingAdapter {
 
+    private final ObjectMapper om = new ObjectMapper();
     @Autowired
     private CardPaymentService cardPaymentService;
 
-    private final ObjectMapper om = new ObjectMapper();
 
     @Bean
-    public Consumer<Message> consumer() {
-
+    public Consumer<Message> paymentReply() {
         return this::consumeMessage;
     }
+
 
     public void consumeMessage(Message message) {
 

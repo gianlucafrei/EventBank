@@ -14,7 +14,7 @@ public class PhoneService {
     private static int counter = 0;
 
     public void sendNotification(PhoneNotificationEvent phoneNotificationEvent) {
-        if (phoneNotificationEvent.getMessage().contains("Failed")) {
+        if (!phoneNotificationEvent.isSuccess()) {
             counter_failure++;
         }
         log.info("[{}/{}] Payment {}: {}", counter_failure, ++counter,

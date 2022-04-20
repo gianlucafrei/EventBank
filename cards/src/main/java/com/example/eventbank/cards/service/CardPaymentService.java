@@ -56,6 +56,7 @@ public class CardPaymentService {
         notificationProducer.sendPhoneNotification(new PhoneNotificationEvent(
                 paymentResultEvent.getDebtorId(),
                 paymentResultEvent.getPaymentId(),
+                paymentResultEvent.isSuccess(),
                 paymentResultEvent.getMessage()
         ));
     }

@@ -4,7 +4,7 @@ server:
 spring:
   cloud:
     function:
-      definition: producer;consumer;globalConsumer
+      definition: producer;paymentRequest;globalConsumer
     stream:
       kafka:
         bindings:
@@ -14,23 +14,27 @@ spring:
               configuration:
                 value.serializer: com.example.eventbank.accounts.dto.converters.MessageSerializer
 
-          consumer-in-0:
+          paymentRequest-in-0:
             consumer:
               configuration:
                 value.deserializer: com.example.eventbank.accounts.dto.converters.MessageDeSerializer
 
+
         binder:
           brokers: localhost:29092
+          autoAddPartitions: true
+          minPartitionCount: 4
 
       bindings:
 
         payment-out-0:
-          destination: payment-events
+          destination: payment-reply-events
           producer:
+            partition-count: 4
             useNativeEncoding: true
 
-        consumer-in-0:
-          destination: payment-events
+        paymentRequest-in-0:
+          destination: payment-request-events
           consumer:
             use-native-decoding: true
 

@@ -11,5 +11,6 @@ public class PhoneNotificationEvent {
 
     String accountId;
     String paymentId;
+    boolean success;
     String message;
 }

@@ -10,14 +10,14 @@ customer accounts of the bank. The second feature of the EventBank is that accou
 
 ## Portfolio Description
 
-- E1: todo
-- E2: We implemented event notifications between the cards service and the notifications service as well as an email notification between the account registration service and the notification service. -> TODO: Event-carried state transfer + Error Scenarios
-- E3: We implemented a process to open an account (todo jonathan)
-- E4: We thought in-depth about the tradeoff between commands and events. The result is the risk based approach and asynchronous execution of payments.
-- E5: We implemented a saga pattern for the payment execution with stateful retry.
-- E6: We created the hand-in documentation and polished the project.
+- E1: We looked at delivery guarantees and the scaling of messaging loads. (Jonathan)
+- E2: We implemented event notifications with the phone and email notifications and card issuing. Further, event-carried state transfer and error scenarios in the payments. (Gian-Luca/Jonathan)
+- E3: We implemented an orchestration process to open an account (Jonathan)
+- E4: We thought in-depth about the tradeoff between commands and events. The result is the risk based approach and asynchronous execution of payments. (Gian-Luca)
+- E5: We implemented a saga pattern for the payment execution with stateful retry. (Gian-Luca)
+- E6: We created the hand-in documentation and polished the project. (Gian-Luca/Jonathan)
 
-The messaging parts were mainly implemented by Gian-Luca. The orchestration parts (process engine) were implemented by Jonathan. However, we did the concept of the processes together and also reviewed each others code.
+The messaging parts were mainly implemented by Gian-Luca. The orchestration parts (process engine) were implemented by Jonathan. However, we did the concept of the processes together and also reviewed each other's code.
 
 The following description give a general overview of the implementation. More details can be found in the documented ADRs which can be found at `/adrs/`.
 
@@ -157,7 +157,7 @@ multiple other benefits. However, in my opinion Spring Kafka was a bit simpler a
 
 As in lab03 we follow the [Cloud Events](https://cloudevents.io/) specification for all messages.
 
-## Experiments with Kafka: Delivery Guarantees (E1)
+## Experiments with Kafka: Delivery Guarantees / Messaging Loads and Scaling (E1)
 
 Our experiment is about the delivery guarantee of messages when using Kafka as the message broker.
 When communicating between microservices it is crucial to answer following questions: 
@@ -219,25 +219,78 @@ no message from this commit will be processed.
 
 The exactly once delivery method can be defined in the producer and consumer binding configurations using:
 
-      isolation.level: read_committed
+    isolation.level: read_committed
+
+This only works if you are using three or more brokers. In case you use less than that there is a workaround for it in
+the development mode, set:
+
+    transaction.state.log.replication.factor: <num_brokers>
+    transaction.state.log.min.isr: <num_brokers>
 
 Setting the isolation level to read_committed will change these additional settings automatically:
 
-      retries=Integer.MAX_VALUE
-      enable.idempotence=true
-      max.in.flight.requests.per.connection=1
+    retries=Integer.MAX_VALUE
+    enable.idempotence=true
+    max.in.flight.requests.per.connection=1
 
-Exactly once delivery is the slowest but also most reliable method. In our case it was about 20% slower than the
-other methods. 
+Exactly once delivery is the slowest but also most reliable method as it is the only method to ensure exactly once processing.
 
 
-### Comparison
+#### Comparison
 
-The comparison is done using sending payment operations to the HTTP endpoint. We used jMeter for the execution 
+The comparison was done using sending payment operations to the HTTP endpoint. We used JMeter for the execution
 of these requests. The execution time is measured to the point were the last payment notification is registered.
+Additionally, we implemented a `CardsLoadTest` that directly initiates the payments without the HTTP request. Hence, we
+only rely on the Kafka messaging as means of communication.
+
 
 |               | Requests | Failures | Execution Time |
 |---------------|----------|----------|----------------|
 | At most once  |  25,000  |     0    |    3:08 min    |
 | At least once |  25,000  |     0    |    3:13 min    |
 | Exactly once  |  25,000  |     0    |    3:46 min    |
+
+When comparing the results between the different methods we noticed that although the configurations were set for
+the producers and consumers, the execution behavior of the different methods had no effect on the results. We did not
+take into account that some of these configuration behaviors only have effect for Kafka Streams (the naming is
+rather confusing with Spring Cloud Stream Kafka/Spring Cloud Stream Kafka Streams). While we do have the options to change
+configurations (e.g. `binder.requiredAcks`, `consumer.maxAttempts`, ...), we have not found the options to guarantee
+exactly once delivery. Hence, for the payments we fully rely on the application logic to guarantee atomicity.
+
+
+### Effects of messaging loads and scaling
+
+During load testing with the `CardsLoadTest` we noticed that if a thread executes transactions with no, or very short
+sleep in between the cycles that the number of failed payments increases significantly with high load. With higher 
+sleep times of 100ms in between executions the payments were executed without failure even using high loads. 
+
+| Requests | Thread Sleep | Failures | Execution Time |
+|----------|--------------|----------|----------------|
+|      100 |     50ms     |     0    | 3.08s          |
+|     1000 |     50ms     |    481   | 16.14s         |
+|   10,000 |     50ms     |   7751   | 1:41 min       |
+|      100 |     100ms    |     0    | 3.13s          |
+|     1000 |     100ms    |     0    | 18.31s         |
+|   10,000 |     100ms    |     0    | 2:40 min       |
+
+Because of the high failure rate we conducted tests to attempt to reduce it. 
+The first change is splitting up the topic for payment-events into payment-request-events and payment-reply-events:
+
+| Requests | Thread Sleep | Failures | Execution Time |
+|----------|--------------|----------|----------------|
+| 100      | 50ms         | 0        | 3.08s          |
+| 1000     | 50ms         | 143      | 17.26s         |
+| 10,000   | 50ms         | 6734     | 1:44 min       |
+
+This reduced the failures for 1000 requests significantly but still did not perform good on a higher load.
+
+Increasing the partitions also had a positive impact on the failure rates, as can be seen in the table below:
+
+| Requests | Thread Sleep | Failures | Execution Time |
+|----------|--------------|----------|----------------|
+| 100      | 50ms         | 0        | 2.95s          |
+| 1000     | 50ms         | 50       | 18.16s         |
+| 10,000   | 50ms         | 5935     | 1:36 min       |
+
+Changing the amount of consumer and consumer groups did not have an impact locally. It would be interesting to test that
+in production while running on multiple servers. 
