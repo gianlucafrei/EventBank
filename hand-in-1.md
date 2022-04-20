@@ -2,6 +2,8 @@
 
 ## Project Description
 
+The repository of the project can be found here: [EventBank](https://github.com/gianlucafrei/EventBank)
+
 EventBank is a overly simplified banking system to study event driven architectures. The first use case that we are 
 interested is to execute **card payments** that come in from an external payment provider. The service that are involved 
 are the payment service that validates the card authorization and the accounts service that managed the balances of the 
@@ -196,14 +198,14 @@ messages in batches which will be retried in case of a missing Ack.
 The at least once delivery guarantee has no predefined configuration label in Kafka. Hence, the setup is 
 the most complicated. We can define is using these configurations in the producer binding configurations:
 
-      enable.idempotence: true
-      max.in.flight.requests.per.connection: 1
-      retries: 999
-      acks: all
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 1
+        retries: 999
+        acks: all
 
 And these consumer binding configurations:
 
-      enable.auto.commit: false
+        enable.auto.commit: false
 
 At least once delivery guarantee is in theory less performant than the at most once delivery. However, in our case
 the duration of the payments under load is only slightly slower using this method. 
@@ -219,19 +221,19 @@ no message from this commit will be processed.
 
 The exactly once delivery method can be defined in the producer and consumer binding configurations using:
 
-    isolation.level: read_committed
+        isolation.level: read_committed
 
 This only works if you are using three or more brokers. In case you use less than that there is a workaround for it in
 the development mode, set:
 
-    transaction.state.log.replication.factor: <num_brokers>
-    transaction.state.log.min.isr: <num_brokers>
+        transaction.state.log.replication.factor: <num_brokers>
+        transaction.state.log.min.isr: <num_brokers>
 
 Setting the isolation level to read_committed will change these additional settings automatically:
 
-    retries=Integer.MAX_VALUE
-    enable.idempotence=true
-    max.in.flight.requests.per.connection=1
+        retries=Integer.MAX_VALUE
+        enable.idempotence=true
+        max.in.flight.requests.per.connection=1
 
 Exactly once delivery is the slowest but also most reliable method as it is the only method to ensure exactly once processing.
 
