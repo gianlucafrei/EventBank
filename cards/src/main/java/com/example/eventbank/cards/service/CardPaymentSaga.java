@@ -35,6 +35,11 @@ public class CardPaymentSaga {
         return this.status != CardPaymentSagaStatus.SUCCESS && this.status != CardPaymentSagaStatus.ERROR;
     }
 
+    public boolean isFailed() {
+
+        return this.status == CardPaymentSagaStatus.ERROR;
+    }
+
     public void retry() throws Exception {
 
 
@@ -57,7 +62,7 @@ public class CardPaymentSaga {
         }
     }
 
-    public PaymentEvent startExecution() {
+    public PaymentEvent startExecution() throws Exception {
 
         this.start = Instant.now();
 
@@ -78,13 +83,14 @@ public class CardPaymentSaga {
                 reserveAmount(paymentEvent);
             }
 
-            // Send payment event
-            executePayment(paymentEvent);
-            this.status = CardPaymentSagaStatus.AWAITING_PAYMENT;
-            return paymentEvent;
         } catch (Exception ex) {
             log.warn("Payment saga failed: {}", ex);
+            throw new ReservationFailedException(ex);
         }
+
+        // Send payment event
+        executePayment(paymentEvent);
+        this.status = CardPaymentSagaStatus.AWAITING_PAYMENT;
         return paymentEvent;
     }
 
@@ -106,7 +112,7 @@ public class CardPaymentSaga {
 
     private boolean isRiskyPayment(PaymentRequest paymentRequest) {
 
-        return paymentRequest.getAmount() > 1000;
+        return paymentRequest.getAmount() >= 1000;
     }
 
     private void reserveAmount(PaymentEvent paymentEvent) throws Exception {

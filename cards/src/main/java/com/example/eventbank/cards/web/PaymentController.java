@@ -2,6 +2,7 @@ package com.example.eventbank.cards.web;
 
 import com.example.eventbank.cards.dto.PaymentRequest;
 import com.example.eventbank.cards.service.CardPaymentService;
+import com.example.eventbank.cards.service.ReservationFailedException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,12 @@ public class PaymentController {
 
         try {
             cardPaymentService.processPayment(paymentRequest);
-        } catch (Exception e) {
+        }
+        catch (ReservationFailedException e){
+
+            return new ResponseEntity("Payment blocked, Sorry :(", HttpStatus.I_AM_A_TEAPOT);
+        }
+        catch (Exception e) {
 
             log.error("Unhandled exception while processing request {}", e.getMessage());
             return new ResponseEntity("internal error", HttpStatus.INTERNAL_SERVER_ERROR);

@@ -21,11 +21,11 @@ public class PaymentsAdapter {
     public void consumePaymentMessage(PaymentEvent paymentEvent){
 
         // We trow a coin and if it's head we just ignore the message to test the retries
-        if(rd.nextBoolean()){
+        /*if(rd.nextBoolean()){
 
             log.info("Let's skipp this message: {}", paymentEvent);
             return;
-        }
+        }*/
 
         log.info("Consuming new payment event: {}", paymentEvent);
         PaymentCommand paymentCommand = new PaymentCommand(
