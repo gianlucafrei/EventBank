@@ -2,7 +2,7 @@
 
 ## Project Description
 
-The repository of the project can be found here: [EventBank](https://github.com/gianlucafrei/EventBank)
+The release of the project can be found here: [EventBank](https://github.com/gianlucafrei/EventBank/releases/tag/v0.1.0-beta)
 
 EventBank is a overly simplified banking system to study event driven architectures. The first use case that we are 
 interested is to execute **card payments** that come in from an external payment provider. The service that are involved 
@@ -134,6 +134,20 @@ workflows were completed. In our case the email notification message to the cust
 main workflow. However, this more as a demonstration rather than functionality. 
 
 The email notification event messages are described in more detail in the next section. 
+
+
+During the setup of Camunda with Kafka messaging I had a lot of errors running the project. One reason for this
+was the use of Spring Cloud Stream Kafka and Spring Kafka in combination. A further issue about that was, that 
+I based my implementation on Lab06 initially. It was rather confusing at the beginning to make the switch to 
+cloud stream, especially with the message dto and the correlation id. This took a lot of time to implement correctly. 
+In hindsight, it would have been better to implement the code with the Cloud Stream messaging setup from scratch, 
+instead of relying on the lab as the base and just use some concepts from it. 
+After the initial setup I really enjoyed working on it. Especially Camunda is fascinating and fun to use. I learned 
+a lot about how to create main and alternative workflows, much more than I could actually implement in this project.
+In Spring Cloud Stream Kafka I spent a lot of time trying to figure out the different configuration possibilities, 
+message delivery guarantees and scaling operations. However, many of it is very complex to implement since Kafka offers endless 
+possibilities in this area. 
+
 
 
 ## Implementation of the Notifications (E2)
