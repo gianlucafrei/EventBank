@@ -1,0 +1,29 @@
+server:
+  port: 8087
+
+spring:
+  cloud:
+    function:
+      definition:
+    stream:
+      kafka:
+
+        bindings:
+          exchange-rate-out-0:
+            producer:
+              configuration:
+                value.serializer: com.example.eventbank.exchangerate.dto.converters.MessageSerializer
+
+        binder:
+          brokers: localhost:29092
+
+      bindings:
+        exchange-rate-out-0:
+          destination: exchange-rate-events
+          producer:
+            useNativeEncoding: true
+
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
