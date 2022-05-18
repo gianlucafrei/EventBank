@@ -33,7 +33,7 @@ public class MessagingAdapter {
             if ("paymentEvent".equals(message.getType())) {
 
                 String json = om.writeValueAsString(message.getData());
-                PaymentEvent event = om.readValue(json, PaymentEvent.class);
+                PaymentRequestEvent event = om.readValue(json, PaymentRequestEvent.class);
                 paymentsAdapter.consumePaymentMessage(event);
             }
         } catch (Exception ex) {

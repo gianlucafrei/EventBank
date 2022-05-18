@@ -1,13 +1,12 @@
 package com.example.eventbank.cards.web;
 
 import com.example.eventbank.cards.dto.Message;
-import com.example.eventbank.cards.dto.PaymentEvent;
+import com.example.eventbank.cards.dto.PaymentRequestEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriUtils;
 
 import java.net.URI;
@@ -56,10 +55,10 @@ public class AccountsServiceAdapater {
         }
     }
 
-    public void sendPaymentEvent(PaymentEvent paymentEvent) {
+    public void sendPaymentEvent(PaymentRequestEvent paymentRequestEvent) {
 
-        Message message = new Message<>("paymentEvent", paymentEvent);
+        Message message = new Message<>("paymentEvent", paymentRequestEvent);
         streamBridge.send("payment-out-0", message);
-        log.info("Sent paymentEvent to payment-out-0: {}", paymentEvent);
+        log.info("Sent paymentEvent to payment-out-0: {}", paymentRequestEvent);
     }
 }

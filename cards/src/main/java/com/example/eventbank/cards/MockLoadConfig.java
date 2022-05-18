@@ -24,7 +24,7 @@ public class MockLoadConfig {
     @Scheduled(fixedRate = 1000)
     public void mockLoad(){
 
-        PaymentRequest request = new PaymentRequest("account1", "account2", 0, "");
+        PaymentRequest request = new PaymentRequest("account1", "account2", 0, "CHF", "");
         cardPaymentService.processPayment(request);
 
     }

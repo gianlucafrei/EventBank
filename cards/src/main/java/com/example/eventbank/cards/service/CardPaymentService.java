@@ -1,6 +1,6 @@
 package com.example.eventbank.cards.service;
 
-import com.example.eventbank.cards.dto.PaymentEvent;
+import com.example.eventbank.cards.dto.PaymentRequestEvent;
 import com.example.eventbank.cards.dto.PaymentRequest;
 import com.example.eventbank.cards.dto.PaymentResultEvent;
 import com.example.eventbank.cards.dto.PhoneNotificationEvent;
@@ -27,7 +27,7 @@ public class CardPaymentService {
     private final NotificationProducer notificationProducer;
     public Map<String, CardPaymentSaga> cardPaymentSagas = new ConcurrentHashMap<>();
 
-    public PaymentEvent processPayment(PaymentRequest paymentRequest) throws Exception {
+    public PaymentRequestEvent processPayment(PaymentRequest paymentRequest) throws Exception {
 
         // Return 401 status if payment is not authorized
         if (!checkPaymentAuthorization(paymentRequest)) {

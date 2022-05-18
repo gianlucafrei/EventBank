@@ -18,7 +18,7 @@ public class PaymentsAdapter {
     Random rd = new Random();
 
 
-    public void consumePaymentMessage(PaymentEvent paymentEvent){
+    public void consumePaymentMessage(PaymentRequestEvent paymentRequestEvent){
 
         // We trow a coin and if it's head we just ignore the message to test the retries
         /*if(rd.nextBoolean()){
@@ -27,12 +27,12 @@ public class PaymentsAdapter {
             return;
         }*/
 
-        log.info("Consuming new payment event: {}", paymentEvent);
+        log.info("Consuming new payment event: {}", paymentRequestEvent);
         PaymentCommand paymentCommand = new PaymentCommand(
-                paymentEvent.getPaymentId(),
-                paymentEvent.getSourceAccount(),
-                paymentEvent.getDestinationAccount(),
-                paymentEvent.getAmount(),
+                paymentRequestEvent.getPaymentId(),
+                paymentRequestEvent.getSourceAccount(),
+                paymentRequestEvent.getDestinationAccount(),
+                paymentRequestEvent.getAmount(),
                 Optional.empty()
         );
 
