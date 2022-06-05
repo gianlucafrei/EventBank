@@ -25,12 +25,14 @@ import java.util.Properties;
 
 @Log4j2
 @Service
-public class PaymentStream {
+public class PaymentDetectionTopology {
 
     public static final int WINDOW_SIZE_SECONDS = 10;
 
     private Path stateDirectory;
     private String bootstrapServers = "localhost:29092";
+
+    public Topology topology;
 
     @PostConstruct
     public void init() {

@@ -23,6 +23,23 @@ The messaging parts were mainly implemented by Gian-Luca. The orchestration part
 
 The following description give a general overview of the implementation. More details can be found in the documented ADRs which can be found at `/adrs/`.
 
+See:
+
+```
+/adr/1_service-granularity.md
+/adr/2_payment_flow.md
+/adr/3_payment_retry.md
+/adr/4_accounts_event_sourcing.md
+/adr/5_persistance.md
+/adr/6_onboarding_workflow.md
+/adr/7_onboarding_communication.md
+```
+
+On top of the required works we implemented some interesting features. This can be found here:
+
+- **Custom Event Sourcing Implementation**: `accounts/src/main/java/com/example/eventbank/accounts/eventLog/EventLog.java` Here we event sourcing to store all state modifications of the accounts service in a linear way. The event log is an append only mechanism that stores the input, output and function reference for each modification. We implemented fluent Java API that so that service classes can use the event log in a very self explanatory way. See also: `accounts/src/main/java/com/example/eventbank/accounts/service/AccountsService.java`
+- **Saga as Class** `cards/src/main/java/com/example/eventbank/cards/service/CardPaymentSaga.java` Here we implemented the Saga pattern in a very explicit way. We create a Java class for each saga which contains the actual saga logic. To start a saga a service class creates a new instance of this saga class and then calls the `startExecution()` endpoint. The service class can also call for instance the `retry()` method if the saga does not finish in time.
+
 ## Implementation of the Card Payments (E4/E5)
 
 The card payments have some important requirements that we need to meet.
