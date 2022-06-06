@@ -19,4 +19,21 @@ public class PaymentExtendedEvent {
     private String currency;
     private String originalCurrency;
     private Double exchangeRate;
+
+    public PaymentExtendedEvent(PaymentRequestEvent request) {
+
+    }
+
+    public static Message<PaymentExtendedEvent> paymentExtendedEventMessage(PaymentRequestEvent request) {
+        return new Message<>("paymentExtended", PaymentExtendedEvent.builder()
+                .paymentId(request.getPaymentId())
+                .sourceAccount(request.getSourceAccount())
+                .destinationAccount(request.getDestinationAccount())
+                .amount(request.getAmount())
+                .originalAmount(request.getAmount())
+                .currency(request.getCurrency())
+                .originalCurrency(request.getCurrency())
+                .exchangeRate(1.0)
+                .build());
+    }
 }

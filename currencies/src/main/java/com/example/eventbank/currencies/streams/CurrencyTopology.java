@@ -13,8 +13,6 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
 
-import java.util.LinkedHashMap;
-
 
 @Log4j2
 public class CurrencyTopology {
@@ -56,7 +54,7 @@ public class CurrencyTopology {
                 (key, message) -> message.getData().getCurrency().equals("CHF")
         );
 
-        KStream<String, Message<PaymentRequestEvent>> paymentCHF = payment.filter(
+        KStream<String, Message<PaymentRequestEvent>> paymentChf = payment.filter(
                 (key, message) -> message.getData().getCurrency().equals("CHF")
         );
 
@@ -76,10 +74,27 @@ public class CurrencyTopology {
                                 .build()
         );
 
-        KStream<String, Message<PaymentExtendedEvent>> paymentExtended = paymentForeign.join(erTable, paymentJoiner);
+        KStream<String, Message<PaymentExtendedEvent>> paymentExtendedForeign = paymentForeign.join(erTable, paymentJoiner);
+
+        KStream<String, Message<PaymentExtendedEvent>> paymentExtendedChf = paymentChf
+                .mapValues(v -> new Message<>("paymentExtended",
+                        PaymentExtendedEvent.builder()
+                            .paymentId(v.getData().getPaymentId())
+                            .sourceAccount(v.getData().getSourceAccount())
+                            .destinationAccount(v.getData().getDestinationAccount())
+                            .amount(v.getData().getAmount())
+                            .originalAmount(v.getData().getAmount())
+                            .currency(v.getData().getCurrency())
+                            .originalCurrency(v.getData().getCurrency())
+                            .exchangeRate(1.0)
+                            .build()));
+
+        KStream<String, Message<PaymentExtendedEvent>> paymentExtended = paymentExtendedForeign
+                .merge(paymentExtendedChf);
 
         paymentExtended.peek((k, v) -> log.info("EXTENDED -> key: {}, value: {}", k, v.getData()));
 
+        paymentExtended.to(PAYMENT_EXTENDED_OUTPUT_TOPIC);
 
         return builder.build();
     }
