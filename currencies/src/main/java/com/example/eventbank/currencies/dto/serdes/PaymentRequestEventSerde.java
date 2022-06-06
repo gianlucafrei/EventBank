@@ -25,7 +25,7 @@ public class PaymentRequestEventSerde implements Serde<Message<PaymentRequestEve
 
     public Message<PaymentRequestEvent> deserialize(String serializedString) throws IOException {
 
-        return om.readValue(serializedString, new TypeReference<Message<PaymentRequestEvent>>() {
+        return om.readValue(serializedString, new TypeReference<>() {
         });
     }
 

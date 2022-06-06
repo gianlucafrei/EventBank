@@ -30,10 +30,10 @@ public class MessagingAdapter {
 
         try {
 
-            if ("paymentEvent".equals(message.getType())) {
+            if ("paymentExtended".equals(message.getType())) {
 
                 String json = om.writeValueAsString(message.getData());
-                PaymentRequestEvent event = om.readValue(json, PaymentRequestEvent.class);
+                PaymentExtendedEvent event = om.readValue(json, PaymentExtendedEvent.class);
                 paymentsAdapter.consumePaymentMessage(event);
             }
         } catch (Exception ex) {

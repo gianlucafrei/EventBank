@@ -1,4 +1,4 @@
-package com.example.eventbank.currencies.dto;
+package com.example.eventbank.accounts.messaging;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -117,7 +117,12 @@ public class CardPaymentSaga {
 
     private void reserveAmount(PaymentRequestEvent paymentRequestEvent) throws Exception {
 
-        accountsServiceAdapater.reserveAmount(paymentRequestEvent.getSourceAccount(), paymentRequestEvent.getAmount(), this.paymentId);
+        accountsServiceAdapater.reserveAmount(
+                paymentRequestEvent.getSourceAccount(),
+                paymentRequestEvent.getAmount(),
+                this.paymentId,
+                paymentRequestEvent.getCurrency()
+        );
     }
 
     private void executePayment(PaymentRequestEvent paymentRequestEvent) throws Exception {

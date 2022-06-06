@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -40,7 +39,7 @@ public class CurrencyController {
         KeyValueIterator<String, Message<ExchangeRateEvent>> range = getStore().all();
         while (range.hasNext()) {
             KeyValue<String, Message<ExchangeRateEvent>> next = range.next();
-            log.info("KEY: {}, ER: {}", next.key, next.value);
+            log.info("GET - Rate for {}, ER: {}", next.key, next.value);
             rates.add(next.value.getData());
         }
         range.close();
@@ -57,8 +56,8 @@ public class CurrencyController {
         KeyValueIterator<String, Message<ExchangeRateEvent>> range = getStore().all();
         while (range.hasNext()) {
             KeyValue<String, Message<ExchangeRateEvent>> next = range.next();
-            if (next.value.getData().getCurrencyFrom().equals(currencyFrom)) {
-                log.info("KEY: {}, ER: {}", next.key, next.value);
+            if (next.value.getData().getCurrencyFrom().equalsIgnoreCase(currencyFrom)) {
+                log.info("GET - Rate for {}, ER: {}", next.key, next.value);
                 rate = next.value.getData();
                 break;
             }

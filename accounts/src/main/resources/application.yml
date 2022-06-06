@@ -34,7 +34,7 @@ spring:
             useNativeEncoding: true
 
         paymentRequest-in-0:
-          destination: payment-request-events
+          destination: payment-extended-events
           consumer:
             use-native-decoding: true
 
