@@ -37,7 +37,7 @@ public class CurrencyStream {
         }
 
         Properties settings = new Properties();
-        settings.put(StreamsConfig.APPLICATION_ID_CONFIG, "paymentRiskProcessor-1");
+        settings.put(StreamsConfig.APPLICATION_ID_CONFIG, "paymentCurrencyProcessor-1");
         settings.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         settings.put(StreamsConfig.STATE_DIR_CONFIG, this.stateDirectory.toAbsolutePath().toString());
 

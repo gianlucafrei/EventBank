@@ -33,13 +33,13 @@ public class CurrencyController {
 
 
     @GetMapping("/rates")
-    public List<LinkedHashMap<String, ?>> exchangeRates() {
+    public List<ExchangeRateEvent> exchangeRates() {
 
-        List<LinkedHashMap<String, ?>> rates = new ArrayList<>();
+        List<ExchangeRateEvent> rates = new ArrayList<>();
 
-        KeyValueIterator<String, Message<LinkedHashMap<String, ?>>> range = getStore().all();
+        KeyValueIterator<String, Message<ExchangeRateEvent>> range = getStore().all();
         while (range.hasNext()) {
-            KeyValue<String, Message<LinkedHashMap<String, ?>>> next = range.next();
+            KeyValue<String, Message<ExchangeRateEvent>> next = range.next();
             log.info("KEY: {}, ER: {}", next.key, next.value);
             rates.add(next.value.getData());
         }
@@ -50,14 +50,14 @@ public class CurrencyController {
 
 
     @GetMapping("/rates/{currencyFrom}")
-    public LinkedHashMap<String, ?> exchangeRateFrom(@PathVariable String currencyFrom) {
+    public ExchangeRateEvent exchangeRateFrom(@PathVariable String currencyFrom) {
 
-        LinkedHashMap<String, ?> rate = new LinkedHashMap<>();
+        ExchangeRateEvent rate = new ExchangeRateEvent();
 
-        KeyValueIterator<String, Message<LinkedHashMap<String, ?>>> range = getStore().all();
+        KeyValueIterator<String, Message<ExchangeRateEvent>> range = getStore().all();
         while (range.hasNext()) {
-            KeyValue<String, Message<LinkedHashMap<String, ?>>> next = range.next();
-            if (next.value.getData().containsValue(currencyFrom)) {
+            KeyValue<String, Message<ExchangeRateEvent>> next = range.next();
+            if (next.value.getData().getCurrencyFrom().equals(currencyFrom)) {
                 log.info("KEY: {}, ER: {}", next.key, next.value);
                 rate = next.value.getData();
                 break;
@@ -68,7 +68,7 @@ public class CurrencyController {
         return rate;
     }
 
-    private ReadOnlyKeyValueStore<String, Message<LinkedHashMap<String, ?>>> getStore() {
+    private ReadOnlyKeyValueStore<String, Message<ExchangeRateEvent>> getStore() {
         return currencyStream.getStreams().store(
                 StoreQueryParameters.fromNameAndType(
                         // state store name

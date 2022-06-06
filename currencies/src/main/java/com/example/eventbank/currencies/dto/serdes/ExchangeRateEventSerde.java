@@ -26,8 +26,7 @@ public class ExchangeRateEventSerde implements Serde<Message<ExchangeRateEvent>>
 
     public Message<ExchangeRateEvent> deserialize(String serializedString) throws IOException {
 
-        return om.readValue(serializedString, new TypeReference<>() {
-        });
+        return om.readValue(serializedString, new TypeReference<>() {});
 
     }
 

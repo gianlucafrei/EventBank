@@ -23,14 +23,14 @@ spring:
         binder:
           brokers: localhost:29092
           autoAddPartitions: true
-          minPartitionCount: 4
+          minPartitionCount: 1
 
       bindings:
 
         payment-out-0:
           destination: payment-reply-events
           producer:
-            partition-count: 4
+            partition-count: 1
             useNativeEncoding: true
 
         paymentRequest-in-0:
