@@ -23,7 +23,7 @@ public class MockLoadConfig {
     private ExchangeRateProducer exchangeRateProducer;
 
     @SneakyThrows
-    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 10000)
     public void mockLoad(){
 
         // EUR-CHF

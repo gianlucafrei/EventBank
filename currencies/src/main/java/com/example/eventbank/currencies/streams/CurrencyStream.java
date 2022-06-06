@@ -1,7 +1,8 @@
 package com.example.eventbank.currencies.streams;
 
 
-import com.example.eventbank.currencies.dto.PaymentResultEventSerDe;
+import com.example.eventbank.currencies.dto.serdes.MessageSerDe;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
@@ -22,6 +23,8 @@ import java.util.Properties;
 public class CurrencyStream {
 
     private Path stateDirectory;
+    @Getter
+    private KafkaStreams streams;
 
     private static final String BOOTSTRAP_SERVERS = "localhost:29092";
 
@@ -39,13 +42,13 @@ public class CurrencyStream {
         settings.put(StreamsConfig.STATE_DIR_CONFIG, this.stateDirectory.toAbsolutePath().toString());
 
         settings.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-        settings.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, PaymentResultEventSerDe.class.getName());
+        settings.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, MessageSerDe.class.getName());
         settings.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG, MessageTimestampExtractor.class.getName());
 
 
         final Topology topology = CurrencyTopology.build();
 
-        KafkaStreams streams = new KafkaStreams(topology, settings);
+        streams = new KafkaStreams(topology, settings);
         streams.start();
     }
 }
