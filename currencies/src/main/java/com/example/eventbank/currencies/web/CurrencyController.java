@@ -39,7 +39,7 @@ public class CurrencyController {
         KeyValueIterator<String, Message<ExchangeRateEvent>> range = getStore().all();
         while (range.hasNext()) {
             KeyValue<String, Message<ExchangeRateEvent>> next = range.next();
-            log.info("GET - Rate for {}, ER: {}", next.key, next.value);
+            log.info("GET - Rate for {}, {}", next.key, next.value.getData());
             rates.add(next.value.getData());
         }
         range.close();
@@ -57,7 +57,7 @@ public class CurrencyController {
         while (range.hasNext()) {
             KeyValue<String, Message<ExchangeRateEvent>> next = range.next();
             if (next.value.getData().getCurrencyFrom().equalsIgnoreCase(currencyFrom)) {
-                log.info("GET - Rate for {}, ER: {}", next.key, next.value);
+                log.info("GET - Rate for {}, {}", next.key, next.value.getData());
                 rate = next.value.getData();
                 break;
             }

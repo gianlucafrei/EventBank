@@ -12,6 +12,8 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.state.KeyValueBytesStoreSupplier;
+import org.apache.kafka.streams.state.Stores;
 
 
 @Log4j2
@@ -31,13 +33,25 @@ public class CurrencyTopology {
         KStream<String, Message<ExchangeRateEvent>> exchangeRate = builder.stream(EXCHANGE_RATE_INPUT_TOPIC,
                 Consumed.with(Serdes.String(), new ExchangeRateEventSerde()));
 
-        payment.peek((k, v) -> log.info("PAYMENT -> key: {}, value: {}", k, v.getData()));
+        payment.peek((k, v) -> log.info("PAYMENT -> {}", v.getData()));
 
-        exchangeRate.peek((k, v) -> log.info("EXCHANGE RATE -> key: {}, value: {}", k, v.getData()));
+        exchangeRate.peek((k, v) -> log.info("EXCHANGE RATE -> {}", v.getData()));
 
-
-        // toTable method has a problem with parameterized Message<> class -> will be a LinkedHashMap
         /*
+        /// Workaround to define keys and writing the exchange rate stream to a topic before reading it again as a globalKTable
+
+        exchangeRate.selectKey((k, v) -> v.getData().getCurrencyFrom()).to("topic");
+
+        KeyValueBytesStoreSupplier supplier = Stores.persistentKeyValueStore(
+                "table"
+        );
+
+        GlobalKTable<String, Message<ExchangeRateEvent>> global = builder.globalTable("topic",
+                Materialized.as(supplier));
+        log.info("GLOBAL {}", global.queryableStoreName());
+
+        /// toTable method has a problem with parameterized Message<> class -> will be a LinkedHashMap
+
         KTable<String, Message<ExchangeRateEvent>> erTable = exchangeRate
                 .selectKey((k, v) -> v.getData().getCurrencyFrom())
                 .toTable(Materialized.as("exchange-rate"));
@@ -92,7 +106,7 @@ public class CurrencyTopology {
         KStream<String, Message<PaymentExtendedEvent>> paymentExtended = paymentExtendedForeign
                 .merge(paymentExtendedChf);
 
-        paymentExtended.peek((k, v) -> log.info("EXTENDED -> key: {}, value: {}", k, v.getData()));
+        paymentExtended.peek((k, v) -> log.info("EXTENDED -> {}", v.getData()));
 
         paymentExtended.to(PAYMENT_EXTENDED_OUTPUT_TOPIC);
 

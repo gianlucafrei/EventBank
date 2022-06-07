@@ -55,7 +55,7 @@ public class AccountsServiceAdapater {
             log.error("Error reserving amount. Status code {} uri {}", response.statusCode(), uri);
             throw new RuntimeException("Error reserving amount for payment");
         } else {
-            log.info("RESERVED {} CHF on account {}", amountChf, account);
+            log.info("RESERVED {} CHF on {}", amountChf, account);
         }
     }
 
