@@ -12,6 +12,7 @@ public class PaymentRequest {
     private String sourceAccount;
     private String destinationAccount;
     private Integer amount;
+    private String currency;
     private String authorizationCode;
 
 }

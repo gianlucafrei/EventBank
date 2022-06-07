@@ -5,12 +5,16 @@
     <file url="file://$PROJECT_DIR$/accounts/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cards/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cards/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/currencies/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/customer-registration/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/customer-registration/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/customer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/customer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/exchange-rate/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/notifications/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/notifications/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/onboarding/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/risks/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/risks/src/main/resources" charset="UTF-8" />
   </component>
 </project>

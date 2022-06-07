@@ -33,7 +33,7 @@ public class RisksApplication {
 
         return new OpenAPI()
                 .components(new Components())
-                .info(new Info().title("EventBank Cards Service"));
+                .info(new Info().title("EventBank Risk Service"));
     }
 
 }

@@ -8,6 +8,9 @@
         <option value="$PROJECT_DIR$/customer-registration/pom.xml" />
         <option value="$PROJECT_DIR$/accounts/pom.xml" />
         <option value="$PROJECT_DIR$/customer/pom.xml" />
+        <option value="$PROJECT_DIR$/risks/pom.xml" />
+        <option value="$PROJECT_DIR$/currencies/pom.xml" />
+        <option value="$PROJECT_DIR$/exchange-rate/pom.xml" />
       </list>
     </option>
   </component>
@@ -16,5 +19,10 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="jpab" />
+  </component>
+  <component name="SwUserDefinedSpecifications">
+    <option name="specTypeByUrl">
+      <map />
+    </option>
   </component>
 </project>

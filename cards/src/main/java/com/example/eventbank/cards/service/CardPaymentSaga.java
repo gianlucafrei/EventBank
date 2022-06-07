@@ -1,6 +1,6 @@
 package com.example.eventbank.cards.service;
 
-import com.example.eventbank.cards.dto.PaymentEvent;
+import com.example.eventbank.cards.dto.PaymentRequestEvent;
 import com.example.eventbank.cards.dto.PaymentRequest;
 import com.example.eventbank.cards.dto.PaymentResultEvent;
 import com.example.eventbank.cards.web.AccountsServiceAdapater;
@@ -20,7 +20,7 @@ public class CardPaymentSaga {
     private final PaymentRequest paymentRequest;
     private final AccountsServiceAdapater accountsServiceAdapater;
     private CardPaymentSagaStatus status;
-    private PaymentEvent paymentEvent;
+    private PaymentRequestEvent paymentRequestEvent;
     private Instant start, end;
     private int numberOfRetries = 0;
 
@@ -58,21 +58,21 @@ public class CardPaymentSaga {
         // We retry only the payment execution step
         if (this.status == CardPaymentSagaStatus.AWAITING_PAYMENT) {
 
-            executePayment(this.paymentEvent);
+            executePayment(this.paymentRequestEvent);
         }
     }
 
-    public PaymentEvent startExecution() throws Exception {
+    public PaymentRequestEvent startExecution() throws Exception {
 
         this.start = Instant.now();
 
         // Create payment event
-        this.paymentEvent = new PaymentEvent(
+        this.paymentRequestEvent = new PaymentRequestEvent(
                 this.paymentId,
                 paymentRequest.getSourceAccount(),
                 paymentRequest.getDestinationAccount(),
-                paymentRequest.getAmount());
-
+                paymentRequest.getAmount(),
+                paymentRequest.getCurrency());
         try {
 
             // Reserve amount only if payment is risky
@@ -80,7 +80,7 @@ public class CardPaymentSaga {
             if (isRisky) {
 
                 this.status = CardPaymentSagaStatus.RESERVING_AMOUNT;
-                reserveAmount(paymentEvent);
+                reserveAmount(paymentRequestEvent);
             }
 
         } catch (Exception ex) {
@@ -89,9 +89,9 @@ public class CardPaymentSaga {
         }
 
         // Send payment event
-        executePayment(paymentEvent);
+        executePayment(paymentRequestEvent);
         this.status = CardPaymentSagaStatus.AWAITING_PAYMENT;
-        return paymentEvent;
+        return paymentRequestEvent;
     }
 
     public void receivedPaymentResult(PaymentResultEvent paymentResultEvent) {
@@ -115,14 +115,19 @@ public class CardPaymentSaga {
         return paymentRequest.getAmount() >= 1000;
     }
 
-    private void reserveAmount(PaymentEvent paymentEvent) throws Exception {
+    private void reserveAmount(PaymentRequestEvent paymentRequestEvent) throws Exception {
 
-        accountsServiceAdapater.reserveAmount(paymentEvent.getSourceAccount(), paymentEvent.getAmount(), this.paymentId);
+        accountsServiceAdapater.reserveAmount(
+                paymentRequestEvent.getSourceAccount(),
+                paymentRequestEvent.getAmount(),
+                this.paymentId,
+                paymentRequestEvent.getCurrency()
+        );
     }
 
-    private void executePayment(PaymentEvent paymentEvent) throws Exception {
+    private void executePayment(PaymentRequestEvent paymentRequestEvent) throws Exception {
 
-        accountsServiceAdapater.sendPaymentEvent(paymentEvent);
+        accountsServiceAdapater.sendPaymentEvent(paymentRequestEvent);
     }
 
     private void finish() {
