@@ -1,6 +1,15 @@
 # Hand In 2
 
+### Updates to Hand In 1
+
+We only made some small updates to hand in one in the Portfolio Description.
+The file can be found in the GitHub project: /hand-in-1.md
+
+The exact changes in the commit: [link](https://github.com/gianlucafrei/EventBank/commit/dddb4e6cb0f2884efe892bf1e504ef3de6afe9d7)
+
 ## Project Description
+
+[Release Link](https://github.com/gianlucafrei/EventBank/releases/tag/v0.2.0-beta)
 
 We extended our existing Event Bank project with two new features which are bases on Kafka stream processing. The first feature is **Payment Detection** which implements stateful stream processing to detect sudden pikes in transaction events. The second feature is **Foreign Currency Transaction** which adds information from a stream of exchange rates to the transactions. This features implements stateless stream processing, interactive lookups and stream joins.
 
