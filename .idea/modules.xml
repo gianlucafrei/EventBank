@@ -5,9 +5,9 @@
       <module fileurl="file://$PROJECT_DIR$/accounts/accounts.iml" filepath="$PROJECT_DIR$/accounts/accounts.iml" />
       <module fileurl="file://$PROJECT_DIR$/accounts/accounts-service.iml" filepath="$PROJECT_DIR$/accounts/accounts-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/cards/cards-service.iml" filepath="$PROJECT_DIR$/cards/cards-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/currencies/currencies.iml" filepath="$PROJECT_DIR$/currencies/currencies.iml" />
+      <module fileurl="file://$PROJECT_DIR$/currencies/currencies-service.iml" filepath="$PROJECT_DIR$/currencies/currencies-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/customer-registration/customer-registration.iml" filepath="$PROJECT_DIR$/customer-registration/customer-registration.iml" />
-      <module fileurl="file://$PROJECT_DIR$/exchange-rate/exchange-rate.iml" filepath="$PROJECT_DIR$/exchange-rate/exchange-rate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/exchange-rate/exchange-rate-service.iml" filepath="$PROJECT_DIR$/exchange-rate/exchange-rate-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/notifications/notification-service.iml" filepath="$PROJECT_DIR$/notifications/notification-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/risks/risks-service.iml" filepath="$PROJECT_DIR$/risks/risks-service.iml" />
     </modules>

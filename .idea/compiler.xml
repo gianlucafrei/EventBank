@@ -7,12 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="exchange-rate-service" />
         <module name="accounts-service" />
         <module name="cards-service" />
-        <module name="exchange-rate" />
+        <module name="currencies-service" />
         <module name="notification-service" />
         <module name="risks-service" />
-        <module name="currencies" />
       </profile>
       <profile name="Annotation profile for customer-registration-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -28,9 +28,11 @@
       <module name="accounts-service" target="15" />
       <module name="cards-service" target="15" />
       <module name="currencies" target="15" />
+      <module name="currencies-service" target="15" />
       <module name="customer-registration" target="15" />
       <module name="customer-service" target="15" />
       <module name="exchange-rate" target="15" />
+      <module name="exchange-rate-service" target="15" />
       <module name="notification-service" target="15" />
       <module name="onboarding" target="1.8" />
       <module name="risks-service" target="15" />
@@ -41,9 +43,11 @@
       <module name="accounts-service" options="-parameters" />
       <module name="cards-service" options="-parameters" />
       <module name="currencies" options="-parameters" />
+      <module name="currencies-service" options="-parameters" />
       <module name="customer-registration" options="-parameters" />
       <module name="customer-service" options="-parameters" />
       <module name="exchange-rate" options="-parameters" />
+      <module name="exchange-rate-service" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="onboarding" options="-parameters" />
       <module name="risks-service" options="-parameters" />
